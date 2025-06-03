@@ -1,16 +1,12 @@
-import App from "../App";
-
+import Pages from '@_pages/Home/index';
 export function Index() {
   return (
-    <App />
+    <Pages.MAIN />
   );
 }
 
 export function About() {
   return (
-    <div>
-      <h1>About</h1>
-      <p>This is the about page.</p>
-    </div>
+    <Pages.ABOUT />
   );
 }
