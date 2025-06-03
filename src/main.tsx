@@ -16,7 +16,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <RouterProvider router={router} />
-      <TanStackRouterDevtools initialIsOpen={false} router={router} position="bottom-right" />
+      { process.env.BUILD === "DEV" && <TanStackRouterDevtools initialIsOpen={false} router={router} position="bottom-right" /> }
     </StrictMode>
   );
 }
