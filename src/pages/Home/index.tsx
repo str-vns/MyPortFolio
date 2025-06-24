@@ -1,5 +1,5 @@
-import Main from '@_pages/Home/home';
-import About from '@_pages/Home/about';
+import Main from '@_/pages/Home/home';
+import About from '@_/pages/Home/about';
 
 const index = {
     MAIN: Main,

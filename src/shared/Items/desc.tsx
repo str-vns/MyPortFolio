@@ -1,5 +1,5 @@
 import React from "react";
-import CarouselComponent from "@_shared/carousel";
+import CarouselComponent from "@_/shared/carousel";
 
 function desc() {
   return (

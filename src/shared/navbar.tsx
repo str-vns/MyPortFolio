@@ -4,8 +4,8 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from "@_components/ui/navigation-menu";
-import { Button } from "@_components/ui/button";
+} from "@_/components/ui/navigation-menu";
+import { Button } from "@_/components/ui/button";
 import { Link, useRouterState } from "@tanstack/react-router";
 
 interface navItem {

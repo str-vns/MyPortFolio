@@ -1,4 +1,4 @@
-import Pages from '@_pages/Home/index';
+import Pages from '@_/pages/Home/index';
 export function Index() {
   return (
     <Pages.MAIN />

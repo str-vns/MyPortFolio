@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { router } from "../src/routes/routes"
+import './index.css'; 
+import './App.css';
 
 declare module "@tanstack/react-router" {
   interface Register {

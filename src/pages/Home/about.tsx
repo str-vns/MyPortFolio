@@ -1,10 +1,12 @@
 import React from 'react'
-import Navbar from "@_shared/navbar";
+
 const About = () => {
   return (
     <div>
-      <Navbar />
-      <h1 className="text-4xl font-bold mb-4">About Page</h1>
+      <img src="https://res.cloudinary.com/diljhwf3a/image/upload/v1696484873/cld-sample-2.jpg"
+      alt="Home"
+      className="w-full h-fullw object-cover rounded-3xl mb-4"
+      />
     </div>
   )
 }

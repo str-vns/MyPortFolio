@@ -1,12 +1,12 @@
 import * as React from "react";
-import { CardContent } from "@_components/ui/card";
+import { CardContent } from "@_/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@_components/ui/carousel";
+} from "@_/components/ui/carousel";
 
 const CarouselComponent: React.FC = () => {
     return (
