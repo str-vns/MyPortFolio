@@ -15,12 +15,13 @@ export default function SidebarNav({
   activeId,
 }: { children: React.ReactNode } & SidebarNavProps) {
   return (
+    
     <SidebarProvider>
       <AppSidebar activeId={activeId} />
       <SidebarInset>
         <header>
-          <div className="flex items-center gap-2 ">
-            <SidebarTrigger className="lg:hidden md:hidden  absolute left-5 top-5 z-50 " />
+          <div className="flex items-center gap-2">
+            <SidebarTrigger className="lg:hidden md:hidden absolute left-5 top-5 z-50" />
           </div>
         </header>
         {children}

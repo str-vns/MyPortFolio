@@ -23,14 +23,14 @@ const Main = () => {
   }, [textIndex]);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full ">
       <img
         src="https://res.cloudinary.com/diljhwf3a/image/upload/v1696484873/cld-sample-2.jpg"
         alt="Main page"
         className="absolute top-0 left-0 w-screen h-screen object-cover pointer-events-none [mask-image:linear-gradient(to_left,black,transparent)]"
       />
 
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-auto z-10">
         <div className="absolute inset-0 bg-gradient-to-r to-transparent pointer-events-none" />
         <div className="flex flex-col items-start justify-center min-h-screen text-left space-y-4 mx-auto w-fit lg:pr-[500px] md:pr-[100px] sm:pr-[150px] pr-10 pl-10">
           <h1

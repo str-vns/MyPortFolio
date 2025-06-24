@@ -23,7 +23,7 @@ export function AppSidebar(props: SidebarNavProps) {
   const { activeId } = props;
 
   return (
-    <div className="absolute left-0 top-0 z-50 h-screen w-40">
+    <div className="fixed inset-0 sm:pointer-events-auto sm:opacity-100">
       <Sidebar className="border-none w-40 ">
         <SidebarContent>
           <SidebarGroup className="h-screen flex items-center justify-center bg-transparent">
