@@ -4,7 +4,7 @@
   "rsc": false,
   "tsx": true,
   "tailwind": {
-    "config": "",
+    "config": "tailwind.config.js",
     "css": "src/App.css",
     "baseColor": "neutral",
     "cssVariables": true,
@@ -22,7 +22,8 @@
     "app": "@_/app",
     "pages": "@_/pages",
     "routes": "@_/routes",
-    "styles": "@_/styles"
+    "styles": "@_/styles",
+    "data": "@_/data"
   },
   "iconLibrary": "lucide"
 }
