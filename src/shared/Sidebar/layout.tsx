@@ -20,7 +20,7 @@ export default function SidebarNav({
       <SidebarInset>
         <header>
           <div className="flex items-center gap-2 ">
-            <SidebarTrigger className="lg:hidden md:hidden  absolute left-0 top-0 z-50 " />
+            <SidebarTrigger className="lg:hidden md:hidden  absolute left-5 top-5 z-50 " />
           </div>
         </header>
         {children}

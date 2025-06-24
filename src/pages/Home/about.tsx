@@ -1,14 +1,12 @@
-import React from 'react'
-
+import React from "react";
 const About = () => {
   return (
-    <div>
-      <img src="https://res.cloudinary.com/diljhwf3a/image/upload/v1696484873/cld-sample-2.jpg"
-      alt="Home"
-      className="w-full h-fullw object-cover rounded-3xl mb-4"
-      />
+    <div className="flex item-center justify-center mt-2">
+      <div className="max-w-2xl mx-auto p-4 ">
+        <h1 className="text-4xl font-bold mb-4 border-b-2 text-gray-800">About Me</h1>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default About
+export default About;

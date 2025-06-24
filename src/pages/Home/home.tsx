@@ -14,23 +14,22 @@ const Home = () => {
       className={` scroll-smooth overflow-hidden`}
       style={{ backgroundColor: colorsTheme.LIGHTGREY }}
     >
-     <SidebarNav activeId={activeId}>
-  <section id="home" className="relative w-full h-screen overflow-hidden">
-  <Main />
-</section>
-
-  <div className="">
-    <section id="about" className="min-h-screen scroll-mt-24">
-      <About />
-    </section>
-    <section id="resume" className="min-h-screen scroll-mt-24">
-      <Resume />
-    </section>
-    <section id="portfolio" className="min-h-screen scroll-mt-24">
-      <Portfolio />
-    </section>
-  </div>
-</SidebarNav>
+      <SidebarNav activeId={activeId}>
+        <section id="home" className="relative w-full h-screen overflow-hidden">
+          <Main />
+        </section>
+        <div className="">
+          <section id="about" className="min-h-screen scroll-mt-24">
+            <About />
+          </section>
+          <section id="resume" className="min-h-screen scroll-mt-24">
+            <Resume />
+          </section>
+          <section id="portfolio" className="min-h-screen scroll-mt-24">
+            <Portfolio />
+          </section>
+        </div>
+      </SidebarNav>
     </div>
   );
 };

@@ -1,6 +1,27 @@
 import { Github, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import TextType from "@_/shared/text/textType";
+import { mainText } from "@_/data/mainText";
+import { useEffect, useState } from "react";
 
+interface textType {
+  subtitle: string;
+}
 const Main = () => {
+  const [textIndex, setTextIndex] = useState(0);
+  const [resetTrigger, setResetTrigger] = useState(false);
+
+  useEffect(() => {
+    const interval = setTimeout(
+      () => {
+        setTextIndex((prev) => (prev + 1) % mainText.length);
+        setResetTrigger(true);
+      },
+      mainText[textIndex].subtitle.length * 100 + 2500
+    );
+
+    return () => clearTimeout(interval);
+  }, [textIndex]);
+
   return (
     <div className="relative w-full h-full">
       <img
@@ -11,7 +32,7 @@ const Main = () => {
 
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="absolute inset-0 bg-gradient-to-r to-transparent pointer-events-none" />
-        <div className="flex flex-col items-start justify-center min-h-screen text-left space-y-4 mx-auto w-fit lg:pr-[250px] md:pr-[200px] sm:pr-[150px] pr-10 pl-10">
+        <div className="flex flex-col items-start justify-center min-h-screen text-left space-y-4 mx-auto w-fit lg:pr-[500px] md:pr-[100px] sm:pr-[150px] pr-10 pl-10">
           <h1
             className="text-6xl font-bold text-gray-800 "
             style={{
@@ -22,7 +43,12 @@ const Main = () => {
           </h1>
 
           <p className="text-lg text-gray-600 ">
-            I'm <span className="border-b-2 border-blue-500">Developer</span>
+            <span className="border-b-2 border-blue-500">
+              <TextType
+                key={textIndex + "-" + resetTrigger}
+                text={mainText[textIndex].subtitle}
+              />
+            </span>
           </p>
 
           {/* Social Icons */}
@@ -60,7 +86,7 @@ const Main = () => {
 
             <a
               href="#"
-              onClick={(e) => e.preventDefault()} 
+              onClick={(e) => e.preventDefault()}
               className="flex flex-col items-center justify-center cursor-not-allowed opacity-50 pointer-events-none"
               aria-disabled="true"
             >
