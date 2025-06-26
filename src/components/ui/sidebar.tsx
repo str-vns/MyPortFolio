@@ -21,7 +21,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@_/components/ui/tooltip";
-
+import { useDarkMode } from "@_/stores/useDarkMode";
+import { useColorsTheme } from "@_/shared/colors";
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "16rem";
@@ -256,22 +257,23 @@ function SidebarTrigger({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { toggleSidebar } = useSidebar();
-
+  const { isDarkMode } = useDarkMode();
   return (
     <Button
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-10", className)} 
+      className={cn(`size-10 ${isDarkMode ? "bg-pink-200" : ""}`, className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
       }}
       {...props}
     >
-      
-      <Menu className="size-8"/> 
+
+      <Menu className={`size-8 `}
+      />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
@@ -342,11 +344,12 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
+  const { isDarkMode } = useDarkMode();
   return (
     <div
       data-slot="sidebar-footer"
       data-sidebar="footer"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn(`flex flex-col gap-2 p-2 ${isDarkMode ? "bg-black" : ""}`, className)}
       {...props}
     />
   );
@@ -367,12 +370,14 @@ function SidebarSeparator({
 }
 
 function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
+  const { isDarkMode } = useDarkMode();
   return (
     <div
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
         "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        isDarkMode ? "bg-black" : "",
         className
       )}
       {...props}

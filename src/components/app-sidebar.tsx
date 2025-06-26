@@ -4,10 +4,13 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
+  SidebarFooter,
 } from "@_/components/ui/sidebar";
 import { items } from "@_/data/sidebarItem";
-import { colorsTheme } from "@_/shared/colors";
-
+import { useColorsTheme } from "@_/shared/colors";
+import { Switch } from "@_/components/ui/switch";
+import { PiSun, PiMoon } from "react-icons/pi";
+import { useDarkMode } from "@_/stores/useDarkMode";
 interface AppSidebarProps {
   id: string;
   title: string;
@@ -20,14 +23,20 @@ interface SidebarNavProps {
 }
 
 export function AppSidebar(props: SidebarNavProps) {
+  const colorsTheme = useColorsTheme();
   const { activeId } = props;
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  const handleDarkMode = (dark: boolean) => {
+    toggleDarkMode(dark);
+  };
 
   return (
     <div className="inset-0">
       <Sidebar className="border-none w-40 ">
         <SidebarContent>
-          <SidebarGroup className="h-screen flex items-center justify-center bg-transparent">
-            <SidebarGroupContent className="w-full px-4 py-10">
+          <SidebarGroup className="h-screen flex items-center justify-center bg-transparent ">
+            <SidebarGroupContent className="w-full px-4 py-10 ">
               <SidebarMenu>
                 {items.map((item: AppSidebarProps) => {
                   const isActive = item.id === activeId;
@@ -85,6 +94,30 @@ export function AppSidebar(props: SidebarNavProps) {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
+        <SidebarFooter className={`flex items-center justify-center h-16 `}>
+          <div
+            className={`flex items-center space-x-2 ${isDarkMode ? "bg-pink-200" : `bg-[${colorsTheme.NAVYBLUE}]`} p-4 mb-3 rounded-full h-6 w-16 `}
+          >
+            <Switch
+              checked={isDarkMode}
+              onCheckedChange={() => {
+                handleDarkMode(!isDarkMode);
+              }}
+              className={` 
+          data-[state=checked]:translate-x-5
+          data-[state=unchecked]:-translate-x-2
+          data-[state=checked]:transition-transform
+          data-[state=unchecked]:transition-transform
+          ring-1
+          w-5 h-5 transition-colors duration-500  `}
+              checkedIcon={<PiMoon size={14} className="text-[#FFDEDE]" />}
+              uncheckedIcon={<PiSun size={14} className="text-[#123458]" />}
+            />
+          </div>
+          {/* <p className="text-sm text-gray-500">
+            © {new Date().getFullYear()} Str_Vns. All rights reserved.
+          </p> */}
+        </SidebarFooter>
       </Sidebar>
     </div>
   );

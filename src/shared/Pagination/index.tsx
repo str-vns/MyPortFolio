@@ -8,6 +8,7 @@ import {
 } from "@_/components/ui/pagination";
 import { useState, Children, isValidElement } from "react";
 import FadeRight from "@_/hooks/FadeRight";
+import { useColorsTheme } from "../colors";
 export default function Paginate({
   children,
   itemsPerPage = 4,
@@ -19,7 +20,7 @@ export default function Paginate({
 }) {
   const allItems = Children.toArray(children).filter(isValidElement);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const colorTheme = useColorsTheme();
   const totalPages = Math.ceil(allItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = allItems.slice(startIndex, startIndex + itemsPerPage);
@@ -33,17 +34,24 @@ export default function Paginate({
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-2">
+    <div className="space-y-6" >
+      <div className="grid grid-cols-1 gap-2" >
         <FadeRight currentItems={currentItems} currentPage={currentPage} />
         {currentItems.length === 0 && (
-          <div className="text-center text-gray-500">
+          <div
+            className="text-center "
+            style={{
+              color: "#FFDEDE",
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+            }}
+          >
             No items to display.
           </div>
         )}
-        </div>
+      </div>
 
-      <Pagination>
+      <Pagination style={{ color: colorTheme.SEMIBLACK }}>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
