@@ -5,7 +5,7 @@ export const educationData = [
         duration: "2018 - 2020",
         course: "STEM (Science, Technology, Engineering, and Mathematics)",
         icon: "✈️",
-        iconColor: "bg-black",
+        iconColor: "bg-yellow-500",
     },
     {
         school: "Technological University of the Philippines - Taguig City",
