@@ -23,7 +23,9 @@
     "pages": "@_/pages",
     "routes": "@_/routes",
     "styles": "@_/styles",
-    "data": "@_/data"
+    "data": "@_/data",
+    "stores": "@_/stores",
+    "storage": "@_/storage"
   },
   "iconLibrary": "lucide"
 }

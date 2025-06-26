@@ -22,6 +22,8 @@
       "@_/config/*": ["./src/config/*"],
       "@_/lib/utils/*": ["./src/lib/utils/*"],
       "@_/data/*": ["./src/data/*"],
+      "@_/stores/*": ["./src/stores/*"],
+      "@_/storage/*": ["./src/storage/*"]
     }
   }
 }

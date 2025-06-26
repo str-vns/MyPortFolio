@@ -33,6 +33,8 @@ export default defineConfig({
         "@_/pages": path.resolve(__dirname, 'src/pages'),
         "@_/lib/utils": path.resolve(__dirname, 'src/lib/utils'),
         "@_/data": path.resolve(__dirname, 'src/data'),
+        "@_/stores": path.resolve(__dirname, 'src/stores'),
+        "@_/storage": path.resolve(__dirname, 'src/storage'),
       }
     }
 })
