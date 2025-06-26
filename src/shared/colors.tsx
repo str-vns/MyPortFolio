@@ -3,4 +3,5 @@ export const colorsTheme = {
     MEDIUMGREY: '#D4C9BE',
     NAVYBLUE: '#123458',
     SEMIBLACK: '#030303',
+    BLACK: '#000000',
 } 

@@ -27,8 +27,7 @@ const CarouselComponent: React.FC = () => {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="absolute left-3 bg-white" />
-      <CarouselNext className="absolute right-3 bg-white" />
+
     </Carousel>
   );
 };

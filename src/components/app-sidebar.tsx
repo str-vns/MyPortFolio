@@ -23,7 +23,7 @@ export function AppSidebar(props: SidebarNavProps) {
   const { activeId } = props;
 
   return (
-    <div className="fixed inset-0 sm:pointer-events-auto sm:opacity-100">
+    <div className="inset-0">
       <Sidebar className="border-none w-40 ">
         <SidebarContent>
           <SidebarGroup className="h-screen flex items-center justify-center bg-transparent">
@@ -50,7 +50,7 @@ export function AppSidebar(props: SidebarNavProps) {
                           }
                         }}
                         className={`h-14 rounded-full flex items-center overflow-hidden transition-all duration-300 
-         text-white w-full`}
+         text-white w-full `}
                         style={{
                           backgroundColor: isActive
                             ? colorsTheme.SEMIBLACK

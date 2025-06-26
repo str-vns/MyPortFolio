@@ -1,9 +1,165 @@
 import React from "react";
+import { ChevronsLeftRightEllipsis, FileCode } from "lucide-react";
+import { colorsTheme } from "@_/shared/colors";
+import { skillsData } from "@_/data/skillsData";
+
+interface Skill {
+  icon: React.ComponentType;
+  title: string;
+  color: string;
+  knowledge?: string;
+}
 const About = () => {
   return (
-    <div className="flex item-center justify-center mt-2">
-      <div className="max-w-2xl mx-auto p-4 ">
-        <h1 className="text-4xl font-bold mb-4 border-b-2 text-gray-800">About Me</h1>
+    <div className="flex flex-col items-center justify-center pt-10 px-4  sm:mr-0 md:mr-20 lg:mr-30">
+      <div className="max-w-6xl border-b-2 text-center mb-5 ">
+        <h1 className="text-4xl font-bold mb-4 text-gray-800">About Me</h1>
+      </div>
+
+      <div className="w-full max-w-6xl text-gray-700 flex flex-col items-center">
+        <p className="mb-4 text-center">
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+          faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+          pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+          tempor.
+        </p>
+      </div>
+
+      <div className="flex flex-col lg:flex-row items-start justify-center gap-10 w-full max-w-[1000px] py-10">
+        <img
+          src="https://res.cloudinary.com/diljhwf3a/image/upload/v1742056004/images/f98ed401-a9b6-47f6-8a78-f8b21c2f30af-2025-03-16-cb0b1c1f-01c3-408e-9316-d45f61841f5d.jpg"
+          alt="About Me"
+          className="rounded-full shadow-lg h-80 w-80 object-cover mx-auto"
+        />
+
+        <div className="max-w-[600px]">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+            Lorem ipsum dolor
+          </h1>
+          <p className="mb-4">
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+            faucibus ex sapien vitae pellentesque sem placerat.
+          </p>
+
+          <div className="mt-6 flex flex-col md:flex-row lg:flex-row justify-between gap-10 mr-5">
+            <div className="flex flex-col ">
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis className="inline-block mr-2 text-gray-500" />
+                Lorem: sit amet
+              </p>
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis className="inline-block mr-2 text-gray-500" />
+                Lorem: sit amet
+              </p>
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis className="inline-block mr-2 text-gray-500" />
+                Lorem: sit ametr
+              </p>
+            </div>
+            <div className="flex flex-col">
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis className="inline-block mr-2 text-gray-500" />
+                Lorem: sit amet
+              </p>
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis className="inline-block mr-2 text-gray-500" />
+                Lorem: sit amet
+              </p>
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis className="inline-block mr-2 text-gray-500" />
+                Lorem: sit amet
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-4">
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+            faucibus ex sapien vitae pellentesque sem placerat.
+          </p>
+        </div>
+      </div>
+
+      <p className="max-w-[1000px] text-center mb-10">
+        Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
+        ex sapien vitae pellentesque sem placerat.
+      </p>
+
+      <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 lg:gap-40 mb-20">
+        {[1, 2, 3, 4].map((item) => (
+          <div key={item} className="flex flex-col items-center justify-center">
+            <div className={`rounded-full bg-[${colorsTheme.NAVYBLUE}] p-4`}>
+              <FileCode className={`text-[${colorsTheme.LIGHTGREY}]`} />
+            </div>
+            <span
+              className={`text-2xl mt-2 font-bold text-[${colorsTheme.SEMIBLACK}]`}
+            >
+              {item}
+            </span>
+            <span
+              className={`text-[16px] mt-2 text-[${colorsTheme.SEMIBLACK}]`}
+            >
+              File Code
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="max-w-6xl border-b-2 text-center mb-5 ">
+        <h1 className="text-4xl font-bold mb-4 text-gray-800">Skills</h1>
+      </div>
+      <div className="w-full max-w-6xl text-gray-700 flex flex-col items-center">
+        <p className="mb-4 text-center">
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+          faucibus ex sapien vitae pellentesque sem placerat.
+        </p>
+      </div>
+      <div className="w-full max-w-6xl flex flex-col">
+        <p className="mb-6 text-2xl font-bold text-center">Technical Skills</p>
+
+        <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-6">
+          {skillsData.map((skill: Skill, index: number) => (
+            <div key={index} className="break-inside-avoid mb-6">
+              <div
+                className="flex items-center justify-center w-12 h-12 rounded-full mx-auto"
+                style={{ backgroundColor: skill.color }}
+              >
+                <skill.icon size={18} />
+              </div>
+              <h3 className="text-xs font-semibold text-gray-800 text-center mt-2">
+                {skill.title}
+              </h3>
+              {skill.knowledge && (
+                <p className="text-xs text-gray-600 text-center">
+                  Knowledge ({skill.knowledge})
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+
+           <div className="w-full max-w-6xl flex flex-col">
+        <p className="mb-6 text-2xl font-bold text-center">Soft Skills</p>
+
+        <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-6">
+          {/* {skillsData.map((skill: Skill, index: number) => (
+            <div key={index} className="break-inside-avoid mb-6">
+              <div
+                className="flex items-center justify-center w-12 h-12 rounded-full mx-auto"
+                style={{ backgroundColor: skill.color }}
+              >
+                <skill.icon size={18} />
+              </div>
+              <h3 className="text-xs font-semibold text-gray-800 text-center mt-2">
+                {skill.title}
+              </h3>
+              {skill.knowledge && (
+                <p className="text-xs text-gray-600 text-center">
+                  Knowledge ({skill.knowledge})
+                </p>
+              )}
+            </div>
+          ))} */}
+        </div>
+        </div>
       </div>
     </div>
   );
