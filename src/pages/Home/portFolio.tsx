@@ -47,20 +47,20 @@ const Portfolio = () => {
           <p className="text-center text-lg font-semibold">Mobile</p>
         </div>
       </div>
-      <div className="flex justify-center items-center mt-4">
-        <div className="flex flex-col items-center mb-5">
-          <Paginate className="w-full max-w-4xl">
-       
-            <Desc />
-            <Desc />
-            <Desc />
-            <Desc />
-            <Desc />
-            <Desc />
-          
-          </Paginate>
-        </div>
-      </div>
+    <div className="flex justify-center items-center mt-4">
+  <div className="flex flex-col items-center mb-5">
+    <Paginate className="w-full max-w-4xl">
+      <Desc />
+      <Desc />
+      <Desc />
+      <Desc />
+      <Desc />
+      <Desc />
+      <Desc />
+  
+    </Paginate>
+  </div>
+</div>
     </div>
   );
 };
