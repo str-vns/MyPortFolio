@@ -23,7 +23,8 @@
       "@_/lib/utils/*": ["./src/lib/utils/*"],
       "@_/data/*": ["./src/data/*"],
       "@_/stores/*": ["./src/stores/*"],
-      "@_/storage/*": ["./src/storage/*"]
+      "@_/storage/*": ["./src/storage/*"],
+      "@_/api/*": ["./src/api/*"],
     }
   }
 }

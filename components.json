@@ -25,7 +25,8 @@
     "styles": "@_/styles",
     "data": "@_/data",
     "stores": "@_/stores",
-    "storage": "@_/storage"
+    "storage": "@_/storage",
+    "api": "@_/api"
   },
   "iconLibrary": "lucide"
 }

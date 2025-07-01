@@ -11,6 +11,11 @@ import { useColorsTheme } from "@_/shared/colors";
 import { Switch } from "@_/components/ui/switch";
 import { PiSun, PiMoon } from "react-icons/pi";
 import { useDarkMode } from "@_/stores/useDarkMode";
+import { KeyValModal } from "@_/shared/Modal/index";
+import { useTokenStore } from "@_/stores/useTokenStore";
+import { Button } from "./ui/button";
+
+
 interface AppSidebarProps {
   id: string;
   title: string;
@@ -26,9 +31,15 @@ export function AppSidebar(props: SidebarNavProps) {
   const colorsTheme = useColorsTheme();
   const { activeId } = props;
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { auth } = useTokenStore();
 
   const handleDarkMode = (dark: boolean) => {
     toggleDarkMode(dark);
+  };
+ 
+  const removeToken = () => {
+    useTokenStore.getState().setToken("");
+    useTokenStore.getState().setAuthenticated(false);
   };
 
   return (
@@ -94,7 +105,29 @@ export function AppSidebar(props: SidebarNavProps) {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter className={`flex items-center justify-center h-16 `}>
+        <SidebarFooter className={`flex items-center justify-center`}>
+          {process.env.BUILD === "DEV" && (
+            <div className="mb-3">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <p
+                  className={`text-sm text-[${isDarkMode ? "#FFDEDE" : "#123458"}]`}
+                >
+                  DEV MODE
+                </p>
+              </div>
+              {!auth ? (
+                <KeyValModal />
+              ) : (
+                <Button
+                  className={`bg-[${isDarkMode ? "#CF0F47" : "#123458"}] text-[${isDarkMode ? "#FFDEDE" : "#F1EFEC"}]
+            hover:bg-[${isDarkMode ? "#FF0B55" : "#D4C9BE"}] hover:text-[${isDarkMode ? "#000000" : "#030303"}]`}
+                  onClick={() => removeToken()}
+                >
+                  Token Remove
+                </Button>
+              )}
+            </div>
+          )}
           <div
             className={`flex items-center space-x-2 ${isDarkMode ? "bg-pink-200" : `bg-[${colorsTheme.NAVYBLUE}]`} p-4 mb-3 rounded-full h-6 w-16 `}
           >

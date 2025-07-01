@@ -35,6 +35,7 @@ export default defineConfig({
         "@_/data": path.resolve(__dirname, 'src/data'),
         "@_/stores": path.resolve(__dirname, 'src/stores'),
         "@_/storage": path.resolve(__dirname, 'src/storage'),
+        "@_/api": path.resolve(__dirname, 'src/api'),
       }
     }
 })

@@ -13,8 +13,10 @@ interface SidebarNavProps {
 export default function SidebarNav({
   children,
   activeId,
+
+
 }: { children: React.ReactNode } & SidebarNavProps) {
-  const colorsTheme = useColorsTheme();
+
   return (
     
     <SidebarProvider>
