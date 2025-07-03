@@ -13,13 +13,14 @@ import { Input } from "@_/components/ui/input";
 import { Label } from "@_/components/ui/label";
 import { useDarkMode } from "@_/stores/useDarkMode";
 import { useColorsTheme } from "../colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetToken } from "@_/hooks/useGitProd";
 import { Textarea } from "../../components/ui/textarea";
 import { X, Star } from "lucide-react";
 import { InputCreate } from "@_/data/InputsData";
-import { DropdownMenuCheckboxes } from "../DropDown"; 
-
+import { DropdownMenuCheckboxes } from "../DropDown";
+import { useGitProdCreate } from "@_/hooks/useGitProd";
+import { FileConvertImage } from "@_/hooks/file64Base";
 interface InputCreateProps {
   id: string;
   title: string;
@@ -124,10 +125,10 @@ export const KeyValModal = () => {
 
 export const ModalCE = () => {
   const { isDarkMode } = useDarkMode();
-  const [keyId, setKeyId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [images, setImages] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+  const { mutateAsync: createGit, isPending, isError } = useGitProdCreate();
   const [fav, setFav] = useState<boolean>(false);
   const [form, setForm] = useState<{ [key: string]: string }>({
     title: "",
@@ -139,58 +140,102 @@ export const ModalCE = () => {
     [key: string]: string | string[];
   }>({
     desc: "",
-    features: [],
-    pLanguages: [],
-    tools: [],
+    features: [] as string[],
+    pLanguages: [] as string[],
+    tools: [] as string[],
   });
 
-  const {
-    mutateAsync: getToken,
-    isPending,
-    isSuccess,
-    isError,
-  } = useGetToken();
+  useEffect(() => {
+    if (isPending) {
+      setLoading(true);
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isPending]);
 
- 
   const handleGitSubmit = async () => {
-    setLoading(true);
     try {
+      if (
+        !form.title ||
+        !form.gitUrl ||
+        !form.category ||
+        !formArea.desc ||
+        images.length === 0
+      ) {
+        console.warn("Please fill all required fields and upload images.");
+        return;
+      }
+      if (formArea.features.length === 0) {
+        console.warn("Please add at least one feature.");
+        return;
+      }
+      if (formArea.pLanguages.length === 0) {
+        console.warn("Please add at least one programming language.");
+        return;
+      }
+      if (formArea.tools.length === 0) {
+        console.warn("Please add at least one tool.");
+        return;
+      }
+
       const formDatas = {
         title: form.title,
         gitUrl: form.gitUrl,
         desc: formArea.desc,
         category: form.category,
         favorite: fav,
-        features: Array.isArray(formArea.features)
-          ? formArea.features.join(", ")
-          : "",
+        features: Array.isArray(formArea.features) ? formArea.features : [],
         pLanguages: Array.isArray(formArea.pLanguages)
-          ? formArea.pLanguages.join(", ")
-          : "",
-        tools: Array.isArray(formArea.tools)
-          ? formArea.tools.join(", ")
-          : "",
+          ? formArea.pLanguages
+          : [],
+        tools: Array.isArray(formArea.tools) ? formArea.tools : [],
         images: images,
-      }
+      };
 
-      await getToken({ keyId });
-      setTimeout(() => {
-        setLoading(false);
-        setKeyId("");
-        setOpen(false);
-      }, 2000);
+      await createGit({ data: formDatas })
+        .then(() => {
+          setForm({
+            title: "",
+            gitUrl: "",
+            category: "",
+          });
+          setFormArea({
+            desc: "",
+            features: [],
+            pLanguages: [],
+            tools: [],
+          });
+          setImages([]);
+          setFav(false);
+          setOpen(false);
+        })
+        .catch((error: string) => {
+          console.error("Error creating git project:", error);
+        });
 
     } catch (error) {
       console.error("Error fetching token:", error);
-      setKeyId("");
-      setLoading(false);
+      setForm({
+        title: "",
+        gitUrl: "",
+        category: "",
+      });
+      setFormArea({
+        desc: "",
+        features: [],
+        pLanguages: [],
+        tools: [],
+      });
+      setImages([]);
     }
   };
 
   const imageHandlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    console.log(images);
+
     if (images.length >= 4) {
       console.warn("You can only upload up to 4 images at a time.");
       return;
@@ -206,16 +251,18 @@ export const ModalCE = () => {
     }
 
     if (files) {
-      const fileArray = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setImages((prev) => [...prev, ...fileArray]);
+      Promise.all(Array.from(files).map((file) => FileConvertImage(file)))
+        .then((base64Array) => {
+          setImages((prev) => [...prev, ...base64Array.flat()]);
+        })
+        .catch((err) => {
+          console.error("Error converting images:", err);
+        });
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    console.log(id, value);
     setForm((prev) => ({
       ...prev,
       [id]: value,
@@ -235,13 +282,17 @@ export const ModalCE = () => {
     setForm({
       title: "",
       gitUrl: "",
+      category: "",
     });
     setFormArea({
       desc: "",
+      features: [],
+      pLanguages: [],
+      tools: [],
     });
     setImages([]);
   };
-console.log("Form Data:", form);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -301,21 +352,21 @@ console.log("Form Data:", form);
                 </div>
               )}
               {input.type === "dropdown" && (
-                <div className="grid flex-1 gap-2 w-full  "> 
+                <div className="grid flex-1 gap-2 w-full  ">
                   <Label htmlFor={input.name} className="text-sm">
                     {input.title}
                   </Label>
                   <div className="flex items-center justify-center ">
-                <DropdownMenuCheckboxes
-                  isDarkMode={isDarkMode}
-                  returnVal={(selected: string) => {
-                    setForm((prev) => ({
-                      ...prev,
-                      [input.name]: selected,
-                    }));  
-                  }}
-                />
-                </div>
+                    <DropdownMenuCheckboxes
+                      isDarkMode={isDarkMode}
+                      returnVal={(selected: string) => {
+                        setForm((prev) => ({
+                          ...prev,
+                          [input.name]: selected,
+                        }));
+                      }}
+                    />
+                  </div>
                 </div>
               )}
 

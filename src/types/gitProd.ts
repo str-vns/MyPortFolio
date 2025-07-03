@@ -6,6 +6,7 @@ export interface gitProd {
     image: string[];
     planguages: string[];
     features: string[];
+    category: string;
     favorite: boolean;
 }
 
@@ -17,6 +18,7 @@ export type getGitProd = {
     images: images[];
     planguages: string[];
     features: string[];
+    category: string;
     favorite: boolean;
 }
 

@@ -10,5 +10,5 @@ export const apiClient: AxiosInstance = axios.create({
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.DOWNTOKEN}`,
     },
-    timeout: 1000,
+    timeout: 10000,
 })

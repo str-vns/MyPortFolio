@@ -2,15 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@_/assets/config/baseUrl";
 import type { gitProd } from "@_/types/gitProd";
 import { useTokenStore } from "@_/stores/useTokenStore";
+import { File64base } from "@_/hooks/file64Base";
 
 export const useGitProd = () => {
-  const token = useTokenStore.getState().token
+  const token = useTokenStore.getState().token;
 
   return useQuery({
     queryKey: ["gitProd"],
     queryFn: async () => {
       try {
-        
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -66,14 +66,40 @@ export const getToken = async ({ Key_ID }: { Key_ID: string }) => {
   }
 };
 
-export const useGitProdCreate = async (data: gitProd) => {
+export const gitProdCreate = async (data: gitProd) => {
+  const token = useTokenStore.getState().token;
+
   try {
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("desc", data.desc);
+    formData.append("gitUrl", data.gitUrl);
+    formData.append("category", data.category);
+    data.features.forEach((feature: string) => {
+      formData.append("features", feature);
+    });
+    data.pLanguages.forEach((language: string) => {
+      formData.append("pLanguages", language);
+    });
+    data.tools.forEach((tool: string) => {
+      formData.append("tools", tool);
+    });
+
+    data.images.forEach((image: string) => {
+      const blob = File64base(image, `image_${Date.now()}.png`, "image/png");
+      formData.append("img", blob);
+    });
+
     const headers = {
       "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${process.env.DOWNTOKEN}`,
+      Authorization: `${token}`,
     };
 
-    const response = await apiClient.post("/gitProd", data, { headers });
+    const response = await apiClient.post("git-projects/create", formData, {
+      headers,
+
+    });
     return response.data;
   } catch (error) {
     console.error("Error creating gitProd:", error);
