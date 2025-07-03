@@ -4,28 +4,6 @@ import type { gitProd } from "@_/types/gitProd";
 import { useTokenStore } from "@_/stores/useTokenStore";
 import { File64base } from "@_/hooks/file64Base";
 
-export const useGitProd = () => {
-  const token = useTokenStore.getState().token;
-
-  return useQuery({
-    queryKey: ["gitProd"],
-    queryFn: async () => {
-      try {
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-
-        const response = await apiClient.get("git-projects", { headers });
-        return response.data;
-      } catch (error) {
-        console.error("Error fetching gitProd:", error);
-        throw new Error("Failed to fetch gitProd data");
-      }
-    },
-  });
-};
-
 export const useGitProdById = (id: string) => {
   return useQuery({
     queryKey: ["gitProd", id],
@@ -76,6 +54,7 @@ export const gitProdCreate = async (data: gitProd) => {
     formData.append("desc", data.desc);
     formData.append("gitUrl", data.gitUrl);
     formData.append("category", data.category);
+    formData.append("favorite", data.favorite);
     data.features.forEach((feature: string) => {
       formData.append("features", feature);
     });
@@ -90,7 +69,7 @@ export const gitProdCreate = async (data: gitProd) => {
       const blob = File64base(image, `image_${Date.now()}.png`, "image/png");
       formData.append("img", blob);
     });
-
+    
     const headers = {
       "Content-Type": "multipart/form-data",
       Authorization: `${token}`,

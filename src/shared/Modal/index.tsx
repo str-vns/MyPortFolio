@@ -161,8 +161,7 @@ export const ModalCE = () => {
         !form.title ||
         !form.gitUrl ||
         !form.category ||
-        !formArea.desc ||
-        images.length === 0
+        !formArea.desc
       ) {
         console.warn("Please fill all required fields and upload images.");
         return;
@@ -208,6 +207,7 @@ export const ModalCE = () => {
             tools: [],
           });
           setImages([]);
+          setLoading(false);
           setFav(false);
           setOpen(false);
         })
@@ -310,12 +310,12 @@ export const ModalCE = () => {
       >
         <DialogHeader>
           <DialogTitle>
-            {" "}
             <div
               className="flex items-center gap-2"
               onClick={() => setFav(!fav)}
             >
               <Star
+              className="mb-2"
                 size={20}
                 stroke="none"
                 fill={
@@ -329,7 +329,7 @@ export const ModalCE = () => {
                 }
               />
             </div>
-            <span>Create</span>
+            <span className="font-bold text-center">Create</span>
           </DialogTitle>
           <DialogDescription> Add your Git Projects</DialogDescription>
         </DialogHeader>

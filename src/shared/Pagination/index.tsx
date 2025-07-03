@@ -14,10 +14,12 @@ export default function Paginate({
   children,
   itemsPerPage = 4,
   maxVisiblePages = 5,
+  returnCurrentPage,
 }: {
   children: React.ReactNode;
   itemsPerPage?: number;
   maxVisiblePages?: number;
+  returnCurrentPage?: (page: number) => void;
 }) {
   const allItems = Children.toArray(children).filter(isValidElement);
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +29,6 @@ export default function Paginate({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = allItems.slice(startIndex, startIndex + itemsPerPage);
 
-  // Slice into 2 columns: 2 items each
   const column1 = currentItems.slice(0, 2);
   const column2 = currentItems.slice(2, 4);
 
@@ -39,6 +40,7 @@ export default function Paginate({
     startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
 
+  console.log("Current Page:", currentPage);
   return (
     <div className="space-y-6">
       {currentItems.length > 0 ? (
@@ -93,6 +95,7 @@ export default function Paginate({
               onClick={(e) => {
                 e.preventDefault();
                 setCurrentPage((prev) => Math.max(1, prev - 1));
+                returnCurrentPage?.(Math.max(1, currentPage - 1));
               }}
             />
           </PaginationItem>

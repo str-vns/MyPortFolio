@@ -8,11 +8,10 @@ import { items } from "@_/data/sidebarItem";
 import { useColorsTheme } from "@_/shared/colors";
 import FadeInOnScroll from "@_/hooks/FadeInOnScroll";
 
-
 const Home = () => {
   const activeId = useScrollSpy(items.map((i: { id: string }) => i.id));
   const colorTheme = useColorsTheme();
-
+ 
   return (
     <div
       className={` scroll-smooth overflow-hidden`}

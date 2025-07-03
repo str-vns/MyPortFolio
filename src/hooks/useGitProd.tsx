@@ -1,6 +1,13 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useInfiniteQuery,
+  useQueryClient,
+  useQuery,
+} from "@tanstack/react-query";
 import { getToken, gitProdCreate } from "@_/api/gitProd";
 import type { getGitProd } from "@_/types/gitProd";
+import { useTokenStore } from "@_/stores/useTokenStore";
+import { apiClient } from "@_/assets/config/baseUrl";
 
 export const useGetToken = () => {
   const queryClient = useQueryClient();
@@ -28,7 +35,6 @@ export const useGitProdCreate = () => {
 
   return useMutation({
     mutationFn: async ({ data }: { data: getGitProd }) => {
-      console.log("Data to be sent:", data);
       const response = await gitProdCreate(data);
       return response.data;
     },
@@ -38,6 +44,32 @@ export const useGitProdCreate = () => {
     },
     onError: (err) => {
       console.error("Error creating gitProd:", err);
+    },
+  });
+};
+
+export const useGitProd = (category?: string, page: number = 1) => {
+  console.log("useGitProd called with category:", category, "and page:", page);
+  const token = useTokenStore.getState().token;
+
+  return useQuery({
+    queryKey: ["gitProd", category, page],
+    queryFn: async () => {
+      try {
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        };
+
+        const response = await apiClient.get(
+          `git-projects?${category ? `&category=${category}` : ""}`,
+          { headers }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching gitProd:", error);
+        throw new Error("Failed to fetch gitProd data");
+      }
     },
   });
 };

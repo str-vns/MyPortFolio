@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -9,19 +9,33 @@ import {
 import Desc from "@_/shared/items/desc";
 import { useColorsTheme } from "@_/shared/colors";
 import Paginate from "@_/shared/pagination/index";
-import type { gitProd } from "@_/types/gitProd";
-import { Button } from "@_/components/ui/button";
 import { useDarkMode } from "@_/stores/useDarkMode";
 import { ModalCE } from "@_/shared/Modal/index";
+import { useGitProd } from "@_/hooks/useGitProd";
 
-interface PortFolioProps {
-  projects: gitProd[];
+interface DescProps {
+  title: string;
+  description: string;
+  images: images[];
+  gitUrl: string;
+  favorite: boolean;
 }
 
-const Portfolio: React.FC<PortFolioProps> = ({ projects }) => {
+type DescDataProps = {
+  dataProps: DescProps;
+};
+
+const Portfolio = () => {
   const colorTheme = useColorsTheme();
   const [isSelected, setSelected] = useState<string | null>("All");
+  const [page, setPage] = useState(1);
   const { isDarkMode } = useDarkMode();
+
+  const { data: gitProd, isPending, refetch } = useGitProd(isSelected, page);
+
+  useEffect(() => {
+    refetch();
+  }, [isSelected, page, refetch]);
 
   return (
     <div className="flex flex-col items-center justify-center pt-10 px-4  sm:mr-0 md:mr-20 lg:mr-30">
@@ -33,8 +47,7 @@ const Portfolio: React.FC<PortFolioProps> = ({ projects }) => {
           PortFolio
         </h1>
       </div>
-        <ModalCE />
-
+      <ModalCE />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-1 gap-10 max-w-[350px] py-3">
         <div
@@ -95,17 +108,33 @@ const Portfolio: React.FC<PortFolioProps> = ({ projects }) => {
         </div>
       </div>
       <div className="flex justify-center items-center mt-4">
-        <div className="flex flex-col items-center mb-5">
-          <Paginate className="w-full max-w-4xl">
-            <Desc />
-            <Desc />
-            <Desc />
-            <Desc />
-            <Desc />
-            <Desc />
-            <Desc />
-          </Paginate>
-        </div>
+        {gitProd?.results && gitProd.results.length > 0 ? (
+          <div className="flex flex-col items-center mb-5">
+            <Paginate
+              className="w-full max-w-4xl"
+              returnCurrentPage={(page: number) => setPage(page)}
+            >
+              {gitProd.results.map((item: DescDataProps, index: number) => (
+                <Desc dataProps={item} key={index} />
+              ))}
+            </Paginate>
+          </div>
+        ) : (
+          <div
+            className={`
+              text-center 
+              justify-center 
+              left-30
+              font-bold
+              text-2xl
+              p-45
+              ${isDarkMode ? "text-[#FFDEDE]" : "text-[#123458]"}
+              `}
+      
+          >
+            <p>No {isSelected} projects to display.</p>
+          </div>
+        )}
       </div>
     </div>
   );
