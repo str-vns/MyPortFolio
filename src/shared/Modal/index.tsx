@@ -18,6 +18,7 @@ import { useGetToken } from "@_/hooks/useGitProd";
 import { Textarea } from "../../components/ui/textarea";
 import { X, Star } from "lucide-react";
 import { InputCreate } from "@_/data/InputsData";
+import { DropdownMenuCheckboxes } from "../DropDown"; 
 
 interface InputCreateProps {
   id: string;
@@ -131,6 +132,7 @@ export const ModalCE = () => {
   const [form, setForm] = useState<{ [key: string]: string }>({
     title: "",
     gitUrl: "",
+    category: "",
   });
 
   const [formArea, setFormArea] = useState<{
@@ -157,6 +159,7 @@ export const ModalCE = () => {
         title: form.title,
         gitUrl: form.gitUrl,
         desc: formArea.desc,
+        category: form.category,
         favorite: fav,
         features: Array.isArray(formArea.features)
           ? formArea.features.join(", ")
@@ -176,7 +179,7 @@ export const ModalCE = () => {
         setKeyId("");
         setOpen(false);
       }, 2000);
-      
+
     } catch (error) {
       console.error("Error fetching token:", error);
       setKeyId("");
@@ -238,7 +241,7 @@ export const ModalCE = () => {
     });
     setImages([]);
   };
-
+console.log("Form Data:", form);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -295,6 +298,24 @@ export const ModalCE = () => {
                     value={form[input.name] || ""}
                     onChange={handleInputChange}
                   />
+                </div>
+              )}
+              {input.type === "dropdown" && (
+                <div className="grid flex-1 gap-2 w-full  "> 
+                  <Label htmlFor={input.name} className="text-sm">
+                    {input.title}
+                  </Label>
+                  <div className="flex items-center justify-center ">
+                <DropdownMenuCheckboxes
+                  isDarkMode={isDarkMode}
+                  returnVal={(selected: string) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      [input.name]: selected,
+                    }));  
+                  }}
+                />
+                </div>
                 </div>
               )}
 

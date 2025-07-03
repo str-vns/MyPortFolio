@@ -16,6 +16,14 @@ export const InputCreate = [
     required: true,
   },
   {
+    title: "Category",
+    type: "dropdown",
+    placeholder: "Select category",
+    name: "category",
+    returnName: "Category",
+    required: true,
+  },
+  {
     title: "Github Project Link",
     type: "text",
     placeholder: "Enter GitHub project link",
@@ -48,3 +56,9 @@ export const InputCreate = [
     required: false,
   },
 ];
+
+export const dropdownOptions = [
+    { value: 'Web', label: 'Web'},
+    { value: 'Mobile', label: 'Mobile'},
+    { value: 'Server', label: 'Server'},
+]
