@@ -24,7 +24,7 @@ interface ColorsTheme {
 } 
  const colorsThemeDark: ColorsTheme = {
     LIGHTGREY: '#000000',
-    MEDIUMGREY: '#FF0B55',
+    MEDIUMGREY: '#FFDEDE',
     NAVYBLUE: '#CF0F47',
     SEMIBLACK: '#FFDEDE',
     BLACK: '#000000',

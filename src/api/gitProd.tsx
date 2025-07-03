@@ -4,7 +4,8 @@ import type { gitProd } from "@_/types/gitProd";
 import { useTokenStore } from "@_/stores/useTokenStore";
 
 export const useGitProd = () => {
-  const { token } = useTokenStore();
+  const token = useTokenStore.getState().token
+
   return useQuery({
     queryKey: ["gitProd"],
     queryFn: async () => {
