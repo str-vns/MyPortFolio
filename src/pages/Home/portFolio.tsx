@@ -42,7 +42,7 @@ const Portfolio = () => {
   }, [isSelected, page, refetch]);
 
   return (
-    <div className="flex flex-col items-center justify-center pt-10 px-4  sm:mr-0 md:mr-20 lg:mr-30">
+    <div className="flex flex-col items-center justify-center pt-10 px-4  sm:mr-0 md:mr-20 lg:mr-30 ">
       <div className="max-w-6xl border-b-2 text-center mb-5 ">
         <h1
           className="text-4xl font-bold mb-4 "

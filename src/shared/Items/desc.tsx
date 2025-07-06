@@ -6,6 +6,7 @@ import type { images } from "@_/types/gitProd";
 import { Star, Github, Eraser, Pencil } from "lucide-react";
 import { useDarkMode } from "@_/stores/useDarkMode";
 import { useGitProdDelete } from "@_/hooks/useGitProd";
+import Accordions from "../Accordion";
 
 interface DescProps {
   title: string;
@@ -37,56 +38,48 @@ const Desc: React.FC<DescDataProps> = ({
   };
 
   const handlerDelete = async (id: string) => {
-    await deleteGitProd( id )
+    await deleteGitProd(id);
   };
 
   return (
     <div
-      className={`flex flex-col items-center bg-[${colorTheme.NAVYBLUE}] border border-[${colorTheme.BLACK}] border-solid border-2 mb-2 rounded-4xl shadow-sm md:flex-row md:w-[1000px] w-full max-w-xs sm:max-w-md md:max-w-[1000px] gap-12 md:gap-8`}
+      className={`flex flex-col md:flex-row
+    bg-[${colorTheme.NAVYBLUE}]
+    border border-[${colorTheme.BLACK}] border-solid border-2
+    mb-2 rounded-4xl shadow-sm
+    w-full max-w-full sm:max-w-md md:max-w-2xl lg:max-w-4xl
+    gap-0`}
     >
-      <div className="object-cover w-full rounded-t-lg h-60 md:h-auto md:w-80 md:rounded-none md:rounded-s-lg p-2">
-        {dataProps.images ? (
-          <img
-            src={dataProps?.images[0]?.url}
-            alt={dataProps.title}
-            className="w-50 h-50 object-cover rounded-3xl"
-          />
-        ) : (
-          <img
-            src={process.env.NOIMAGE}
-            alt={dataProps.title}
-            className="w-50 h-50 object-cover rounded-3xl"
-          />
-        )}
+      <div className="w-full md:w-80 p-2 flex-shrink-0 flex justify-center items-start">
+        <CarouselComponent items={dataProps.images} />
       </div>
-      <div className="flex flex-col p-4 leading-normal w-full">
-        <div className={`flex justify-between items-center`}>
-          <div>
-            <h5
-              className={`flex flex-row mb-2 text-2xl font-bold tracking-tight text-[${colorTheme.TEXT}] `}
-            >
-              {dataProps.title}{" "}
-              <Star
-                className="mt-2 inline-block ml-2"
-                size={20}
-                stroke="none"
-                fill={
-                  dataProps.favorite === "true"
-                    ? isDarkMode
-                      ? "#FFDEDE"
-                      : "#F1EFEC"
-                    : isDarkMode
-                      ? "#222"
-                      : "#123458"
-                }
-              />
-            </h5>
-          </div>
+
+      <div className="flex flex-col p-4 leading-normal w-full h-full">
+        <div className="flex justify-between items-start flex-wrap">
+          <h5
+            className={`flex flex-row mb-2 text-2xl font-bold tracking-tight text-[${colorTheme.TEXT}]`}
+          >
+            {dataProps.title}
+            <Star
+              className="mt-2 inline-block ml-2"
+              size={20}
+              stroke="none"
+              fill={
+                dataProps.favorite === "true"
+                  ? isDarkMode
+                    ? "#FFDEDE"
+                    : "#F1EFEC"
+                  : isDarkMode
+                    ? "#222"
+                    : "#123458"
+              }
+            />
+          </h5>
 
           {process.env.BUILD === "DEV" && (
-            <div className={`flex flex-row gap-1 items-center text-2xl`}>
+            <div className="flex flex-row gap-1 items-center text-2xl">
               <Button
-                className={`text-2xl  text-blue-800 hover:text-blue-500 `}
+                className="text-2xl text-blue-800 hover:text-blue-500"
                 variant="ghost"
                 onClick={() => handleOpenModal(dataProps?.key)}
               >
@@ -96,7 +89,7 @@ const Desc: React.FC<DescDataProps> = ({
                 />
               </Button>
               <Button
-                className={`text-2xl text-red-800 hover:text-red-500`}
+                className="text-2xl text-red-800 hover:text-red-500"
                 variant="ghost"
                 onClick={() => handlerDelete(dataProps?.key)}
               >
@@ -110,25 +103,18 @@ const Desc: React.FC<DescDataProps> = ({
         </div>
 
         <p className={`mb-3 font-normal text-[${colorTheme.TEXT}]`}>
-          <Github className="inline-block mr-2 " size={20} />
+          <Github className="inline-block mr-2" size={20} />
           {dataProps.gitUrl}
         </p>
-        <p className={`mb-3 font-normal text-[${colorTheme.TEXT}]`}>
+
+        <p
+          className={`mb-3 font-normal text-[${colorTheme.TEXT}] break-words whitespace-pre-wrap`}
+        >
           {dataProps.description}
         </p>
-        <div className="flex justify-end items-end">
-          <Button
-            className={`bg-[${colorTheme.BUTTON}] text-[${colorTheme.TEXT}] hover:bg-[${colorTheme.HOVERBUTTON}] hover:text-[${colorTheme.HOVERTEXT}]`}
-            asChild
-          >
-            <a
-              href={dataProps.gitUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Read more
-            </a>
-          </Button>
+
+        <div className="w-full mt-2">
+          <Accordions items={dataProps} />
         </div>
       </div>
     </div>

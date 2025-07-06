@@ -37,6 +37,7 @@
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.16.0",
+    "react-medium-image-zoom": "^5.2.14",
     "shadcn": "^2.6.0",
     "shadcn-ui": "^0.9.5",
     "sonner": "^2.0.6",
