@@ -1,9 +1,9 @@
 import Main from '@_/pages/Home/home';
-import About from '@_/pages/Home/about';
+import SingleProd from '@_/pages/Home/singleProdj';
 
 const index = {
     MAIN: Main,
-    ABOUT: About,
+    SINGLE: SingleProd,
   };
 
 export default index;

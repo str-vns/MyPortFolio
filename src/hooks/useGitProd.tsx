@@ -1,10 +1,11 @@
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import {
-  useMutation,
-  useInfiniteQuery,
-  useQueryClient,
-  useQuery,
-} from "@tanstack/react-query";
-import { getToken, gitProdCreate } from "@_/api/gitProd";
+  getToken,
+  gitProdCreate,
+  gitProdDelete,
+  gitProdUpdate,
+  removeImage,
+} from "@_/api/gitProd";
 import type { getGitProd } from "@_/types/gitProd";
 import { useTokenStore } from "@_/stores/useTokenStore";
 import { apiClient } from "@_/assets/config/baseUrl";
@@ -49,7 +50,6 @@ export const useGitProdCreate = () => {
 };
 
 export const useGitProd = (category?: string, page: number = 1) => {
-  console.log("useGitProd called with category:", category, "and page:", page);
   const token = useTokenStore.getState().token;
 
   return useQuery({
@@ -73,3 +73,94 @@ export const useGitProd = (category?: string, page: number = 1) => {
     },
   });
 };
+
+export const useGitProdSingle = (project_id: string) => {
+  const token = useTokenStore.getState().token;
+
+  return useQuery({
+    queryKey: ["gitProdSingle", project_id],
+    queryFn: async () => {
+      try {
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        };
+
+        const response = await apiClient.get(`git-projects/${project_id}`, {
+          headers,
+        });
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching single gitProd:", error);
+        throw new Error("Failed to fetch single gitProd data");
+      }
+    },
+  });
+};
+
+export const useGitProdDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (project_id: string) => {
+      return await gitProdDelete(project_id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["gitProd"] });
+    },
+    onError: (err) => {
+      console.error("Error deleting gitProd:", err);
+    },
+  });
+};
+
+export const useGitProdUpdate = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      project_id,
+      data,
+    }: {
+      project_id: string;
+      data: getGitProd;
+    }) => {
+
+      const response = await gitProdUpdate(project_id, data);
+
+      return response.data;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["gitProd"] });
+    },
+
+    onError: (err) => {
+      console.error("Error updating gitProd:", err);
+    },
+  });
+};
+
+
+export const useRemoveImage = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      project_id,
+      public_id,
+    }: {
+      project_id: string;
+      public_id: string;
+    }) => {
+      return await removeImage(project_id, public_id);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["gitProd"] });
+    },
+
+    onError: (err) => {
+      console.error("Error removing image:", err);
+    },
+  });
+}

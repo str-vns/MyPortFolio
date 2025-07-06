@@ -4,21 +4,6 @@ import type { gitProd } from "@_/types/gitProd";
 import { useTokenStore } from "@_/stores/useTokenStore";
 import { File64base } from "@_/hooks/file64Base";
 
-export const useGitProdById = (id: string) => {
-  return useQuery({
-    queryKey: ["gitProd", id],
-    queryFn: async () => {
-      try {
-        const response = await apiClient.get(`git-projects/${id}`);
-        return response.data;
-      } catch (error) {
-        console.error(`Error fetching gitProd with id ${id}:`, error);
-        throw new Error(`Failed to fetch gitProd data for id ${id}`);
-      }
-    },
-  });
-};
-
 export const getToken = async ({ Key_ID }: { Key_ID: string }) => {
   try {
     const headers = {
@@ -69,7 +54,7 @@ export const gitProdCreate = async (data: gitProd) => {
       const blob = File64base(image, `image_${Date.now()}.png`, "image/png");
       formData.append("img", blob);
     });
-    
+
     const headers = {
       "Content-Type": "multipart/form-data",
       Authorization: `${token}`,
@@ -77,7 +62,6 @@ export const gitProdCreate = async (data: gitProd) => {
 
     const response = await apiClient.post("git-projects/create", formData, {
       headers,
-
     });
     return response.data;
   } catch (error) {
@@ -86,36 +70,99 @@ export const gitProdCreate = async (data: gitProd) => {
   }
 };
 
-export const useGitProdUpdate = async (id: string, data: gitProd) => {
+export const gitProdUpdate = async (project_id: string, data: gitProd) => {
+  if (!project_id) {
+    throw new Error("Project ID is required for update");
+  }
+  const token = useTokenStore.getState().token;
+
   try {
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("desc", data.desc);
+    formData.append("gitUrl", data.gitUrl);
+    formData.append("category", data.category);
+    formData.append("favorite", data.favorite);
+
+    data.features.forEach((feature: string) => {
+      formData.append("features", feature);
+    });
+    data.pLanguages.forEach((language: string) => {
+      formData.append("pLanguages", language);
+    });
+    data.tools.forEach((tool: string) => {
+      formData.append("tools", tool);
+    });
+
+    data.images.forEach((image: string) => {
+      if (typeof image === "string") {
+        const blob = File64base(image, `image_${Date.now()}.png`, "image/png");
+        formData.append("img", blob);
+      }
+    });
+
     const headers = {
-      "Conteny-Type": "multipart/form-data",
-      Authorization: `Bearer`,
+      "Content-Type": "multipart/form-data",
+      Authorization: `${token}`,
     };
 
-    const response = await apiClient.patch(`/git-projects/${id}`, data, {
-      headers,
-    });
+    const response = await apiClient.patch(
+      `git-projects/patch/${project_id}`,
+      formData,
+      { headers }
+    );
     return response.data;
   } catch (error) {
-    console.error(`Error updating gitProd with id ${id}:`, error);
-    throw new Error(`Failed to update gitProd data for id ${id}`);
+    console.error(`Error updating gitProd with id ${project_id}:`, error);
+    throw new Error(`Failed to update gitProd data for id ${project_id}`);
   }
 };
 
-export const useGitProdDelete = async (id: string) => {
+export const gitProdDelete = async (project_id: string) => {
+  console.log("gitProdDelete called with project_id:", project_id);
+  if (!project_id) {
+    throw new Error("Project ID is required for deletion");
+  }
+  const token = useTokenStore.getState().token;
   try {
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.DOWNTOKEN}`,
+      Authorization: `${token}`,
     };
 
-    const response = await apiClient.delete(`/git-projects/${id}`, "", {
-      headers,
-    });
+    const response = await apiClient.delete(
+      `git-projects/delete/${project_id}`,
+      { headers }
+    );
     return response.data;
   } catch (error) {
-    console.error(`Error Deleting GitPProd with id ${id}:`, error);
-    throw new Error(`Failed to delete gitProd data for id ${id}`);
+    console.error(`Error Deleting GitProd with id ${project_id}:`, error);
+    throw new Error(`Failed to delete gitProd data for id ${project_id}`);
+  }
+};
+
+
+export const removeImage = async (project_id: string, public_id: string) => {
+  if (!project_id || !public_id) {
+    throw new Error("Project ID and Public ID are required for deletion");
+  }
+  const token = useTokenStore.getState().token;
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    };
+
+    const response = await apiClient.patch(
+      `git-projects/remove-images/${project_id}`,
+      { public_id },
+      { headers }
+    );
+    return response.data;
+
+  } catch (error) {
+    console.error(`Error Deleting GitProd with id ${project_id}:`, error);
+    throw new Error(`Failed to delete gitProd data for id ${project_id}`);
   }
 };

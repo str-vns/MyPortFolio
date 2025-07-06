@@ -5,8 +5,8 @@ export function Index() {
   );
 }
 
-export function About() {
+export function SingleProd() {
   return (
-    <Pages.ABOUT />
+    <Pages.SINGLE />
   );
 }

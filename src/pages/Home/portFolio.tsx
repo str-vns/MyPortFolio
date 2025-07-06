@@ -12,6 +12,7 @@ import Paginate from "@_/shared/pagination/index";
 import { useDarkMode } from "@_/stores/useDarkMode";
 import { ModalCE } from "@_/shared/Modal/index";
 import { useGitProd } from "@_/hooks/useGitProd";
+import type { images } from "@_/types/gitProd";
 
 interface DescProps {
   title: string;
@@ -28,7 +29,10 @@ type DescDataProps = {
 const Portfolio = () => {
   const colorTheme = useColorsTheme();
   const [isSelected, setSelected] = useState<string | null>("All");
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [isId, setId] = useState<string>("");
   const { isDarkMode } = useDarkMode();
 
   const { data: gitProd, isPending, refetch } = useGitProd(isSelected, page);
@@ -47,7 +51,14 @@ const Portfolio = () => {
           PortFolio
         </h1>
       </div>
-      <ModalCE />
+
+      <ModalCE
+        isEdit={isEdit}
+        opening={isOpen}
+        setOpening={(val: boolean) => setIsOpen(val)}
+        setEdit={(val: boolean) => setIsEdit(val)}
+        prodjectId={isEdit ? isId : undefined}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-1 gap-10 max-w-[350px] py-3">
         <div
@@ -110,12 +121,18 @@ const Portfolio = () => {
       <div className="flex justify-center items-center mt-4">
         {gitProd?.results && gitProd.results.length > 0 ? (
           <div className="flex flex-col items-center mb-5">
-            <Paginate
-              className="w-full max-w-4xl"
-              returnCurrentPage={(page: number) => setPage(page)}
-            >
+            <Paginate className="w-full max-w-2xl" pageReturn={page}>
               {gitProd.results.map((item: DescDataProps, index: number) => (
-                <Desc dataProps={item} key={index} />
+                <Desc
+                  dataProps={item}
+                  key={index}
+                  opening={(val: boolean, isEdit: boolean) => {
+                    setIsOpen(val);
+                    setIsEdit(isEdit);
+                  }}
+                  setPage={(val: number) => setPage(val)}
+                  valID={(value: string) => setId(value)}
+                />
               ))}
             </Paginate>
           </div>
@@ -130,7 +147,6 @@ const Portfolio = () => {
               p-45
               ${isDarkMode ? "text-[#FFDEDE]" : "text-[#123458]"}
               `}
-      
           >
             <p>No {isSelected} projects to display.</p>
           </div>

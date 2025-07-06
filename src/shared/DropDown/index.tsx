@@ -14,6 +14,7 @@ import { dropdownOptions } from "@_/data/InputsData"
 
 interface DropdownMenuCheckboxesProps {
   isDarkMode?: boolean;
+  isCategory?: string;
   returnVal: (value: string) => void;
 }
 
@@ -22,8 +23,14 @@ interface DropdownOptions {
     label: string;
 }
 
-export const DropdownMenuCheckboxes: React.FC<DropdownMenuCheckboxesProps> = ({ returnVal, isDarkMode }) => {
+export const DropdownMenuCheckboxes: React.FC<DropdownMenuCheckboxesProps> = ({ isCategory, returnVal, isDarkMode }) => {
    const [category, setCategory] = React.useState("")
+   
+    React.useEffect(() => {
+      if (isCategory) {
+        setCategory(isCategory)
+      }
+    }, [isCategory])
 
    const handleCategoryChange = (selected: string) => {
      setCategory(selected)

@@ -19,8 +19,14 @@ import { Textarea } from "../../components/ui/textarea";
 import { X, Star } from "lucide-react";
 import { InputCreate } from "@_/data/InputsData";
 import { DropdownMenuCheckboxes } from "../DropDown";
-import { useGitProdCreate } from "@_/hooks/useGitProd";
+import {
+  useGitProdCreate,
+  useGitProdUpdate,
+  useRemoveImage,
+} from "@_/hooks/useGitProd";
 import { FileConvertImage } from "@_/hooks/file64Base";
+import { useGitProdSingle } from "@_/hooks/useGitProd";
+
 interface InputCreateProps {
   id: string;
   title: string;
@@ -28,6 +34,15 @@ interface InputCreateProps {
   type: string;
   returnName: string;
   name: string;
+  key: string;
+}
+
+interface ModalProps {
+  isEdit?: boolean;
+  opening?: boolean;
+  prodjectId?: string;
+  setOpening?: (val: boolean) => void;
+  setEdit?: (val: boolean) => void;
 }
 
 export const KeyValModal = () => {
@@ -123,19 +138,28 @@ export const KeyValModal = () => {
   );
 };
 
-export const ModalCE = () => {
+export const ModalCE: React.FC<ModalProps> = ({
+  isEdit,
+  opening,
+  setOpening,
+  setEdit,
+  prodjectId,
+}) => {
   const { isDarkMode } = useDarkMode();
   const [loading, setLoading] = useState<boolean>(false);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<
+    (string | { url: string; public_id?: string })[]
+  >([]);
   const [open, setOpen] = useState(false);
   const { mutateAsync: createGit, isPending, isError } = useGitProdCreate();
+  const { mutateAsync: updateGit, isPending: isUpdating } = useGitProdUpdate();
+  const { mutateAsync: removeImage } = useRemoveImage();
   const [fav, setFav] = useState<boolean>(false);
   const [form, setForm] = useState<{ [key: string]: string }>({
     title: "",
     gitUrl: "",
     category: "",
   });
-
   const [formArea, setFormArea] = useState<{
     [key: string]: string | string[];
   }>({
@@ -145,24 +169,54 @@ export const ModalCE = () => {
     tools: [] as string[],
   });
 
+  const { data: gitProdSingle } = useGitProdSingle(prodjectId);
+
   useEffect(() => {
-    if (isPending) {
+    setOpen(!!opening);
+    if (isEdit) {
+      setForm({
+        title: gitProdSingle?.title || "",
+        gitUrl: gitProdSingle?.gitUrl || "",
+        category: gitProdSingle?.category || "",
+      });
+      setFormArea({
+        desc: gitProdSingle?.description || "",
+        features: gitProdSingle?.features || [],
+        pLanguages: gitProdSingle?.pLanguages || [],
+        tools: gitProdSingle?.tools || [],
+      });
+      setImages(gitProdSingle?.images || []);
+      setFav(gitProdSingle?.favorite || false);
+    } else {
+      setForm({
+        title: "",
+        gitUrl: "",
+        category: "",
+      });
+      setFormArea({
+        desc: "",
+        features: [],
+        pLanguages: [],
+        tools: [],
+      });
+      setImages([]);
+      setFav(false);
+    }
+  }, [opening, isEdit, gitProdSingle]);
+
+  useEffect(() => {
+    if (isPending || isUpdating) {
       setLoading(true);
       const timer = setTimeout(() => {
         setLoading(false);
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [isPending]);
+  }, [isPending, isUpdating]);
 
   const handleGitSubmit = async () => {
     try {
-      if (
-        !form.title ||
-        !form.gitUrl ||
-        !form.category ||
-        !formArea.desc
-      ) {
+      if (!form.title || !form.gitUrl || !form.category || !formArea.desc) {
         console.warn("Please fill all required fields and upload images.");
         return;
       }
@@ -190,31 +244,47 @@ export const ModalCE = () => {
           ? formArea.pLanguages
           : [],
         tools: Array.isArray(formArea.tools) ? formArea.tools : [],
-        images: images,
+        images: images.filter((file) =>
+          typeof file === "string" ? "https://" !== file.slice(0, 8) : true
+        ),
       };
 
-      await createGit({ data: formDatas })
-        .then(() => {
-          setForm({
-            title: "",
-            gitUrl: "",
-            category: "",
+      if (isEdit && prodjectId) {
+        await updateGit({ data: formDatas, project_id: prodjectId })
+          .then(() => {
+            setLoading(false);
+            setFav(false);
+            setOpen(false);
+            if (setOpening) setOpening(false);
+            if (setEdit) setEdit(false);
+          })
+          .catch((error: string) => {
+            console.error("Error updating git project:", error);
           });
-          setFormArea({
-            desc: "",
-            features: [],
-            pLanguages: [],
-            tools: [],
+        return;
+      } else {
+        await createGit({ data: formDatas })
+          .then(() => {
+            setForm({
+              title: "",
+              gitUrl: "",
+              category: "",
+            });
+            setFormArea({
+              desc: "",
+              features: [],
+              pLanguages: [],
+              tools: [],
+            });
+            setImages([]);
+            setLoading(false);
+            setFav(false);
+            setOpen(false);
+          })
+          .catch((error: string) => {
+            console.error("Error creating git project:", error);
           });
-          setImages([]);
-          setLoading(false);
-          setFav(false);
-          setOpen(false);
-        })
-        .catch((error: string) => {
-          console.error("Error creating git project:", error);
-        });
-
+      }
     } catch (error) {
       console.error("Error fetching token:", error);
       setForm({
@@ -279,6 +349,8 @@ export const ModalCE = () => {
 
   const closeModal = () => {
     setOpen(false);
+    if (setOpening) setOpening(false);
+    if (setEdit) setEdit(false);
     setForm({
       title: "",
       gitUrl: "",
@@ -294,13 +366,23 @@ export const ModalCE = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(val: boolean) => {
+        setOpen(val);
+        if (setOpening) setOpening(val);
+        if (setEdit) setEdit(false);
+      }}
+    >
       <DialogTrigger asChild>
         <Button
           variant="outline"
           className={`bg-[${isDarkMode ? "#CF0F47" : "#123458"}] text-[${isDarkMode ? "#FFDEDE" : "#F1EFEC"}]
             hover:bg-[${isDarkMode ? "#FF0B55" : "#D4C9BE"}] hover:text-[${isDarkMode ? "#000000" : "#030303"}]
             `}
+          onClick={() => {
+            if (setEdit) setEdit(false);
+          }}
         >
           Create
         </Button>
@@ -315,7 +397,7 @@ export const ModalCE = () => {
               onClick={() => setFav(!fav)}
             >
               <Star
-              className="mb-2"
+                className="mb-2"
                 size={20}
                 stroke="none"
                 fill={
@@ -359,6 +441,7 @@ export const ModalCE = () => {
                   <div className="flex items-center justify-center ">
                     <DropdownMenuCheckboxes
                       isDarkMode={isDarkMode}
+                      isCategory={form?.category}
                       returnVal={(selected: string) => {
                         setForm((prev) => ({
                           ...prev,
@@ -490,34 +573,44 @@ export const ModalCE = () => {
 
           <div className="w-full">
             <div className="flex flex-row gap-2 mt-2 overflow-x-auto max-h-[140px] items-start pb-2">
-              {images.map((image, idx) => (
-                <div
-                  key={idx}
-                  className="flex flex-col items-center min-w-[130px] gap-2 relative"
-                >
-                  <img
-                    src={image}
-                    alt={`Uploaded ${idx + 1}`}
-                    className="w-[120px] h-[120px] object-cover rounded-md"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className={`
-            bg-black
-            text-[${isDarkMode ? "#FFDEDE" : "#F1EFEC"}]
-            hover:bg-[${isDarkMode ? "#FF0B55" : "#D4C9BE"}]
-            hover:text-[${isDarkMode ? "#000000" : "#030303"}]
-            w-fit absolute top-2 right-2 h-7 w-7 rounded-full
-          `}
-                    onClick={() => {
-                      setImages((prev) => prev.filter((_, i) => i !== idx));
-                    }}
+              {images.map((image, idx: number) => {
+                const src =
+                  typeof image === "string" ? image : image?.url || "";
+                return (
+                  <div
+                    key={idx}
+                    className="flex flex-col items-center min-w-[130px] gap-2 relative"
                   >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+                    <img
+                      src={src}
+                      alt={`Uploaded ${idx + 1}`}
+                      className="w-[120px] h-[120px] object-cover rounded-md"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={`
+              bg-black
+              text-[${isDarkMode ? "#FFDEDE" : "#F1EFEC"}]
+              hover:bg-[${isDarkMode ? "#FF0B55" : "#D4C9BE"}]
+              hover:text-[${isDarkMode ? "#000000" : "#030303"}]
+              w-fit absolute top-2 right-2 h-7 w-7 rounded-full
+            `}
+                      onClick={() => {
+                        if (typeof image !== "string") {
+                          removeImage({
+                            project_id: prodjectId,
+                            public_id: image.public_id,
+                          });
+                        }
+                        setImages((prev) => prev.filter((_, i) => i !== idx));
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -542,9 +635,9 @@ export const ModalCE = () => {
             className={`bg-black text-[${isDarkMode ? "#FFDEDE" : "#F1EFEC"}]
             hover:bg-[${isDarkMode ? "#FF0B55" : "#D4C9BE"}] hover:text-[${isDarkMode ? "#000000" : "#030303"}]`}
             onClick={handleGitSubmit}
-            disabled={loading}
+            disabled={isPending || isUpdating}
           >
-            {loading ? "Submitting..." : "Submit"}
+            {(isPending || isUpdating) ? "Submitting..." : "Submit"}
           </Button>
         </DialogFooter>
       </DialogContent>

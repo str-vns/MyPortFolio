@@ -6,7 +6,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@_/components/ui/pagination";
-import { useState, Children, isValidElement } from "react";
+import { useState, Children, isValidElement, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useColorsTheme } from "../colors";
 
@@ -14,12 +14,12 @@ export default function Paginate({
   children,
   itemsPerPage = 4,
   maxVisiblePages = 5,
-  returnCurrentPage,
+  pageReturn,
 }: {
   children: React.ReactNode;
   itemsPerPage?: number;
   maxVisiblePages?: number;
-  returnCurrentPage?: (page: number) => void;
+  pageReturn?: number;
 }) {
   const allItems = Children.toArray(children).filter(isValidElement);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,11 +40,11 @@ export default function Paginate({
     startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
 
-  console.log("Current Page:", currentPage);
+
   return (
     <div className="space-y-6">
       {currentItems.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
           {/* Column 1 */}
           <div className="flex flex-col gap-4">
             {column1.map((item, i) => (
