@@ -1,6 +1,6 @@
 import { createRootRoute, createRoute, Router } from "@tanstack/react-router";
 import App from "../App";
-import { About, Index } from "./main";
+import { SingleProd, Index } from "./main";
 
 export const routerConfigs = [
   {
@@ -9,9 +9,9 @@ export const routerConfigs = [
     component: Index,
   },
   {
-    path: "/about",
-    label: "About",
-    component: About,
+    path: "/SingleProd/:id",
+    label: "SingleProd",
+    component: SingleProd,
   },
 ];
 
