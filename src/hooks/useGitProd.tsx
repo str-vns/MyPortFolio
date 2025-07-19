@@ -140,7 +140,6 @@ export const useGitProdUpdate = () => {
   });
 };
 
-
 export const useRemoveImage = () => {
   const queryClient = useQueryClient();
 
@@ -163,4 +162,52 @@ export const useRemoveImage = () => {
       console.error("Error removing image:", err);
     },
   });
+}
+
+export const useSkills = () => {
+  const token = useTokenStore.getState().token;
+
+  return useQuery({
+    queryKey: ['skills'],
+    queryFn: async () => {
+      try{
+        const headers = {
+          "Content-Type" : "application/json",
+          Authorization : `${token}`,
+        }
+
+        const response = await apiClient.get(`skills`, { headers });
+        return response.data
+
+      } catch (error) {
+        console.error("Error fetching Skills:", error);
+        throw new Error("Failed to fetch Skills data");
+      }
+    }
+  })
+  
+}
+
+export const useSoftSkill = () => {
+  const token = useTokenStore.getState().token;
+
+  return useQuery({
+    queryKey: ['softSkill'],
+    queryFn: async () => {
+      try {
+
+        const headers = {
+          "Content-Type" : "application/json",
+          Authorization : `${token}`
+        }
+
+        const response = await apiClient.get(`soft-skill`, { headers })
+        return response.data
+
+      }catch(error) {
+        console.log("Error getting SoftSkill", error)
+        throw new Error("Failed to fetch SoftSkills data");
+      }
+    }
+  })
 }

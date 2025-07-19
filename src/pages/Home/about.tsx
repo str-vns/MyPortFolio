@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChevronsLeftRightEllipsis, FileCode } from "lucide-react";
 import { useColorsTheme } from "@_/shared/colors";
+import { List } from "@_/shared/List";
 import { skillsData } from "@_/data/skillsData";
+import { useSkills, useSoftSkill } from "@_/hooks/useGitProd";
 
 interface Skill {
   icon: React.ComponentType;
@@ -9,8 +11,16 @@ interface Skill {
   color: string;
   knowledge?: string;
 }
+
 const About = () => {
+  const { data: skills, isPending, refetch } = useSkills();
+  const { data: softSkill } = useSoftSkill()
   const colorTheme = useColorsTheme();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <div className="flex flex-col items-center justify-center pt-10 px-4  sm:mr-0 md:mr-20 lg:mr-30">
       <div className="max-w-6xl border-b-2 text-center mb-5 ">
@@ -42,9 +52,8 @@ const About = () => {
           <h1
             className="text-3xl font-bold text-gray-800 mb-4 stroke-2"
             style={{
-                    color: colorTheme.NAVYBLUE,
-
-                  }}
+              color: colorTheme.NAVYBLUE,
+            }}
           >
             Lorem ipsum dolor
           </h1>
@@ -64,54 +73,6 @@ const About = () => {
                   className="font-bold"
                   style={{
                     color: colorTheme.NAVYBLUE,
-
-                  }}
-                >
-                  Lorem: sit amet
-                </span>
-              </p>
-              <p className="mb-5">
-                <ChevronsLeftRightEllipsis
-                  className="inline-block mr-2 "
-                  style={{ color: colorTheme.SEMIBLACK }}
-                />
-                <span
-                  className="font-bold"
-                 style={{
-                    color: colorTheme.NAVYBLUE,
-
-                  }}
-                >
-                  Lorem: sit amet
-                </span>
-              </p>
-              <p className="mb-5">
-                <ChevronsLeftRightEllipsis
-                  className="inline-block mr-2 "
-                  style={{ color: colorTheme.SEMIBLACK }}
-                />
-                <span
-                  className="font-bold"
-                 style={{
-                    color: colorTheme.NAVYBLUE,
-
-                  }}
-                >
-                  Lorem: sit amet
-                </span>
-              </p>
-            </div>
-            <div className="flex flex-col">
-              <p className="mb-5">
-                <ChevronsLeftRightEllipsis
-                  className="inline-block mr-2 "
-                  style={{ color: colorTheme.SEMIBLACK }}
-                />
-                <span
-                  className="font-bold"
-                 style={{
-                    color: colorTheme.NAVYBLUE,
-
                   }}
                 >
                   Lorem: sit amet
@@ -126,7 +87,50 @@ const About = () => {
                   className="font-bold"
                   style={{
                     color: colorTheme.NAVYBLUE,
-
+                  }}
+                >
+                  Lorem: sit amet
+                </span>
+              </p>
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis
+                  className="inline-block mr-2 "
+                  style={{ color: colorTheme.SEMIBLACK }}
+                />
+                <span
+                  className="font-bold"
+                  style={{
+                    color: colorTheme.NAVYBLUE,
+                  }}
+                >
+                  Lorem: sit amet
+                </span>
+              </p>
+            </div>
+            <div className="flex flex-col">
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis
+                  className="inline-block mr-2 "
+                  style={{ color: colorTheme.SEMIBLACK }}
+                />
+                <span
+                  className="font-bold"
+                  style={{
+                    color: colorTheme.NAVYBLUE,
+                  }}
+                >
+                  Lorem: sit amet
+                </span>
+              </p>
+              <p className="mb-5">
+                <ChevronsLeftRightEllipsis
+                  className="inline-block mr-2 "
+                  style={{ color: colorTheme.SEMIBLACK }}
+                />
+                <span
+                  className="font-bold"
+                  style={{
+                    color: colorTheme.NAVYBLUE,
                   }}
                 >
                   Lorem: sit amet
@@ -198,69 +202,23 @@ const About = () => {
           faucibus ex sapien vitae pellentesque sem placerat.
         </p>
       </div>
-      <div className="w-full max-w-6xl flex flex-col">
+      <div className="w-full max-w-6xl ">
         <p
           className="mb-6 text-2xl font-bold text-center"
           style={{ color: colorTheme.SEMIBLACK }}
         >
           Technical Skills
         </p>
+        <List items={skills} isTech={true} />
 
-        <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-6">
-          {skillsData.map((skill: Skill, index: number) => (
-            <div key={index} className="break-inside-avoid mb-6">
-              <div
-                className="flex items-center justify-center w-12 h-12 rounded-full mx-auto"
-                style={{ backgroundColor: skill.color }}
-              >
-                <skill.icon />
-              </div>
-              <h3
-                className="text-xs font-semibold text-center mt-2"
-                style={{ color: colorTheme.SEMIBLACK }}
-              >
-                {skill.title}
-              </h3>
-              {skill.knowledge && (
-                <p
-                  className="text-xs text-center"
-                  style={{ color: colorTheme.SEMIBLACK }}
-                >
-                  Knowledge ({skill.knowledge})
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="w-full max-w-6xl flex flex-col">
+        <div className="w-full max-w-6xl mb-10">
           <p
-            className="mb-6 text-2xl font-bold text-center"
+            className="mb-10 text-2xl font-bold text-center"
             style={{ color: colorTheme.SEMIBLACK }}
           >
             Soft Skills
           </p>
-
-          <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-6">
-            {/* {skillsData.map((skill: Skill, index: number) => (
-            <div key={index} className="break-inside-avoid mb-6">
-              <div
-                className="flex items-center justify-center w-12 h-12 rounded-full mx-auto"
-                style={{ backgroundColor: skill.color }}
-              >
-                <skill.icon size={18} />
-              </div>
-              <h3 className="text-xs font-semibold text-gray-800 text-center mt-2">
-                {skill.title}
-              </h3>
-              {skill.knowledge && (
-                <p className="text-xs text-gray-600 text-center">
-                  Knowledge ({skill.knowledge})
-                </p>
-              )}
-            </div>
-          ))} */}
-          </div>
+           <List items={softSkill} isTech={false} />
         </div>
       </div>
     </div>

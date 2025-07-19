@@ -25,13 +25,13 @@ const Home = () => {
           <Main />
         </section>
         <FadeInOnScroll>
-          <section id="about" className="min-h-screen scroll-mt-24">
+          <section  id="about" className="min-h-[110vh] scroll-mt-24">
             <About />
           </section>
         </FadeInOnScroll>
 
         <FadeInOnScroll>
-          <section id="resume" className="min-h-screen scroll-mt-24 ">
+          <section id="resume" className="min-h-screen scroll-mt-24">
             <Resume />
           </section>
         </FadeInOnScroll>

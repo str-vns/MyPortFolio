@@ -142,7 +142,6 @@ export const gitProdDelete = async (project_id: string) => {
   }
 };
 
-
 export const removeImage = async (project_id: string, public_id: string) => {
   if (!project_id || !public_id) {
     throw new Error("Project ID and Public ID are required for deletion");
