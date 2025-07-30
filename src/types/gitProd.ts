@@ -27,3 +27,15 @@ export interface images {
     url: string;
     original_name: string;
 }
+
+export interface CEGit {
+    title: string;
+    desc: string;
+    gitUrl: string;
+    tools: string[];
+    images: (string | { url: string; public_id?: string })[];
+    planguages: string[];
+    features: string[];
+    category: string;
+    favorite: string;
+}

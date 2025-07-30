@@ -1,19 +1,12 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ChevronsLeftRightEllipsis, FileCode } from "lucide-react";
 import { useColorsTheme } from "@_/shared/colors";
 import { List } from "@_/shared/List";
 import { showCase } from "@_/data/ShowCase";
 import { useSkills, useSoftSkill } from "@_/hooks/useGitProd";
 
-interface Skill {
-  icon: React.ComponentType;
-  title: string;
-  color: string;
-  knowledge?: string;
-}
-
 const About = () => {
-  const { data: skills, isPending, refetch } = useSkills();
+  const { data: skills, refetch } = useSkills();
   const { data: softSkill } = useSoftSkill();
   const colorTheme = useColorsTheme();
 
@@ -43,7 +36,7 @@ const About = () => {
 
       <div className="flex flex-col lg:flex-row items-start justify-center gap-10 w-full max-w-[1000px] py-10">
         <img
-          src="https://res.cloudinary.com/diljhwf3a/image/upload/v1742056004/images/f98ed401-a9b6-47f6-8a78-f8b21c2f30af-2025-03-16-cb0b1c1f-01c3-408e-9316-d45f61841f5d.jpg"
+          src={process.env.MYIMG}
           alt="About Me"
           className="rounded-full shadow-lg h-80 w-80 object-cover mx-auto"
         />

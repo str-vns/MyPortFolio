@@ -1,5 +1,7 @@
 export type AccordionItems = {
-    features: string[]
+     features: string[]
     tools: string[]   
-    key: string
+    key?: string 
+    pLanguages?: string[] 
+    desc?: string
 }

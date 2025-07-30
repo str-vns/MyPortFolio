@@ -4,7 +4,6 @@ import {
   SidebarTrigger,
 } from "@_/components/ui/sidebar";
 import { AppSidebar } from "@_/components/app-sidebar";
-import { useColorsTheme } from "../colors";
 
 interface SidebarNavProps {
   activeId: string;

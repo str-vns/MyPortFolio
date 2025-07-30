@@ -22,7 +22,7 @@ import {
   TooltipTrigger,
 } from "@_/components/ui/tooltip";
 import { useDarkMode } from "@_/stores/useDarkMode";
-import { useColorsTheme } from "@_/shared/colors";
+
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "16rem";
@@ -265,7 +265,7 @@ function SidebarTrigger({
       variant="ghost"
       size="icon"
       className={cn(`size-10 ${isDarkMode ? "bg-pink-200" : ""}`, className)}
-      onClick={(event) => {
+      onClick={(event: any) => {
         onClick?.(event);
         toggleSidebar();
       }}

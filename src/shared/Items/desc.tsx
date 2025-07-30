@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import CarouselComponent from "@_/shared/carousel";
 import { useColorsTheme } from "@_/shared/colors";
 import { Button } from "@_/components/ui/button";
@@ -14,7 +14,10 @@ interface DescProps {
   images: images[];
   gitUrl: string;
   favorite: string;
-  key: string;
+  key?: string;
+  features: string[];
+  tools: string[];
+  planguages?: string[];
 }
 
 type DescDataProps = {
@@ -22,6 +25,7 @@ type DescDataProps = {
   opening: (val: boolean, isEdit: boolean) => void;
   valID: (value: string) => void;
 };
+
 
 const Desc: React.FC<DescDataProps> = ({
   dataProps,
@@ -51,7 +55,7 @@ const Desc: React.FC<DescDataProps> = ({
     gap-0`}
     >
       <div className="w-full md:w-80 p-2 flex-shrink-0 flex justify-center items-start">
-        <CarouselComponent items={dataProps.images} />
+        <CarouselComponent items={dataProps?.images || []} />
       </div>
 
       <div className="flex flex-col p-4 leading-normal w-full h-full">
@@ -59,13 +63,13 @@ const Desc: React.FC<DescDataProps> = ({
           <h5
             className={`flex flex-row mb-2 text-2xl font-bold tracking-tight text-[${colorTheme.TEXT}]`}
           >
-            {dataProps.title}
+            {dataProps?.title || ""}
             <Star
               className="mt-2 inline-block ml-2"
               size={20}
               stroke="none"
               fill={
-                dataProps.favorite === "true"
+                dataProps?.favorite === "true"
                   ? isDarkMode
                     ? "#FFDEDE"
                     : "#F1EFEC"
@@ -81,7 +85,7 @@ const Desc: React.FC<DescDataProps> = ({
               <Button
                 className="text-2xl text-blue-800 hover:text-blue-500"
                 variant="ghost"
-                onClick={() => handleOpenModal(dataProps?.key)}
+                onClick={() => handleOpenModal(dataProps?.key ?? "")}
               >
                 <Pencil
                   fill={isDarkMode ? "blue" : "skyblue"}
@@ -91,7 +95,7 @@ const Desc: React.FC<DescDataProps> = ({
               <Button
                 className="text-2xl text-red-800 hover:text-red-500"
                 variant="ghost"
-                onClick={() => handlerDelete(dataProps?.key)}
+                onClick={() => handlerDelete(dataProps?.key ?? "")}
               >
                 <Eraser
                   fill={isDarkMode ? "#000" : "#fe7171"}
@@ -104,13 +108,13 @@ const Desc: React.FC<DescDataProps> = ({
 
         <p className={`mb-3 font-normal text-[${colorTheme.TEXT}]`}>
           <Github className="inline-block mr-2" size={20} />
-          {dataProps.gitUrl}
+          {dataProps?.gitUrl}
         </p>
 
         <p
           className={`mb-3 font-normal text-[${colorTheme.TEXT}] break-words whitespace-pre-wrap`}
         >
-          {dataProps.description}
+          {dataProps?.description}
         </p>
 
         <div className="w-full mt-2">

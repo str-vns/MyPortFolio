@@ -17,9 +17,19 @@ const Accordions: React.FC<AccordionProps> = ({ items }) => {
 const { isDarkMode } = useDarkMode();
   return (
     <Accordion type="single" collapsible >
-      <AccordionItem value={items?.key} >
+      <AccordionItem value={`item-${items?.key || '1'}`}>
         <AccordionTrigger className={`ml-82 lg:ml-105  ${isDarkMode ? 'text-[#FFDEDE]' : 'text-[#F1EFEC]'}`}>View More</AccordionTrigger>
         <AccordionContent className={`text-[16px] text-gray-500 ${isDarkMode ? 'text-[#FFDEDE]' : 'text-[#F1EFEC]'}`}>
+            <div>
+            <h3 className="text-lg font-semibold mt-2">Programming Language</h3>
+           {items?.pLanguages && items?.pLanguages.length > 0 && (
+            <p className="text-lg mb-2">
+                {items?.pLanguages.map((lang: string, index: number) => (
+                  <p key={index}>{lang}</p>
+                ))}
+            </p>
+            )}
+          </div>
           <div>
             <h3 className="text-lg font-semibold mb-2">Features:</h3>
             {items?.features && items?.features.length > 0 && (

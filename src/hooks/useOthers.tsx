@@ -1,6 +1,4 @@
-import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { getToken } from "@_/api/gitProd";
-import type { getGitProd } from "@_/types/gitProd";
+import {  useQuery } from "@tanstack/react-query";
 import { useTokenStore } from "@_/stores/useTokenStore";
 import { apiClient } from "@_/assets/config/baseUrl";
 
@@ -11,12 +9,12 @@ export const useEducation = () => {
     queryKey: ["Educ"],
     queryFn: async () => {
       try {
-        const header = {
+        const headers = {
           "Content-Type": "application/json",
           Authorization: `${token}`,
         };
 
-        const response = await apiClient.get("education", { header });
+        const response = await apiClient.get("education", { headers });
         return response.data;
       } catch (error) {
         console.log("Error Fetch Education", error);
@@ -32,12 +30,12 @@ export const useExperience = () => {
     queryKey: ["Exp"],
     queryFn: async () => {
       try {
-        const header = {
+        const headers = {
           "Content-Type": "application/json",
           Authorization: `${token}`,
         };
 
-        const response = await apiClient.get("experience", { header });
+        const response = await apiClient.get("experience", { headers });
         return response.data;
       } catch (error) {
         console.log("Error Fetch Experience", error);

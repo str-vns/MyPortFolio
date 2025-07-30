@@ -30,7 +30,8 @@ import {
   PiMicrosoftWordLogoFill,
   PiMicrosoftPowerpointLogoFill,
 } from "react-icons/pi";
-const iconMap = {
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   SiJavascript,
   SiPython,
   SiTypescript,
@@ -65,7 +66,7 @@ const iconMap = {
 type itemData = {
   title: string;
   color?: string;
-  icon?: React.ComponentType;
+  icon?: keyof typeof iconMap;
   knowledge?: string;
 };
 
@@ -107,7 +108,7 @@ export const List: React.FC<ListProps> = ({ items, isTech }) => {
                       (() => {
                         const IconComponent = iconMap[
                           dataItem.icon
-                        ] as React.ComponentType;
+                        ] as React.ComponentType<{ className?: string }>;
                         return IconComponent ? (
                           <IconComponent className="text-white text-xl" />
                         ) : null;
@@ -142,7 +143,10 @@ export const List: React.FC<ListProps> = ({ items, isTech }) => {
               <li
                 key={index}
                 className="py-3 px-4 rounded-lg shadow-sm text-center text-gray-800 font-medium hover:shadow-md transition"
-                style={{ color: colorTheme.TEXT, background: colorTheme.BUTTON}}
+                style={{
+                  color: colorTheme.TEXT,
+                  background: colorTheme.BUTTON,
+                }}
               >
                 {skill.title}
               </li>

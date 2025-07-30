@@ -6,7 +6,7 @@ import {
   gitProdUpdate,
   removeImage,
 } from "@_/api/gitProd";
-import type { getGitProd } from "@_/types/gitProd";
+import type { CEGit } from "@_/types/gitProd";
 import { useTokenStore } from "@_/stores/useTokenStore";
 import { apiClient } from "@_/assets/config/baseUrl";
 
@@ -35,11 +35,9 @@ export const useGitProdCreate = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ data }: { data: getGitProd }) => {
-      const response = await gitProdCreate(data);
-      return response.data;
+    mutationFn: async (formData: CEGit) => {
+      return await gitProdCreate(formData);
     },
-
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["gitProd"] });
     },
@@ -48,6 +46,7 @@ export const useGitProdCreate = () => {
     },
   });
 };
+
 
 export const useGitProd = (category?: string, page: number = 1) => {
   const token = useTokenStore.getState().token;
@@ -116,24 +115,14 @@ export const useGitProdDelete = () => {
 
 export const useGitProdUpdate = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: async ({
-      project_id,
-      data,
-    }: {
-      project_id: string;
-      data: getGitProd;
-    }) => {
-
-      const response = await gitProdUpdate(project_id, data);
-
-      return response.data;
+    mutationFn: async ({ project_id, data }: { project_id: string; data: CEGit }) => {
+      return await gitProdUpdate(project_id, data);
     },
-
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["gitProd"] });
     },
-
     onError: (err) => {
       console.error("Error updating gitProd:", err);
     },

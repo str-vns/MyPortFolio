@@ -1,6 +1,6 @@
 import SidebarNav from "@_/shared/Sidebar/layout";
 import Main from "@_/pages/Home/main";
-import Portfolio from "@_/pages/Home/portfolio";
+import Portfolio from "@_/pages/Home/portFolio";
 import Resume from "@_/pages/Home/resume";
 import About from "@_/pages/Home/about";
 import { useScrollSpy } from "@_/hooks/scrollSpy";

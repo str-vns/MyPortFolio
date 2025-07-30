@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@_/assets/config/baseUrl";
-import type { gitProd } from "@_/types/gitProd";
+import type { CEGit } from "@_/types/gitProd";
 import { useTokenStore } from "@_/stores/useTokenStore";
 import { File64base } from "@_/hooks/file64Base";
 
@@ -29,7 +28,7 @@ export const getToken = async ({ Key_ID }: { Key_ID: string }) => {
   }
 };
 
-export const gitProdCreate = async (data: gitProd) => {
+export const gitProdCreate = async (data: CEGit) => {
   const token = useTokenStore.getState().token;
 
   try {
@@ -43,14 +42,14 @@ export const gitProdCreate = async (data: gitProd) => {
     data.features.forEach((feature: string) => {
       formData.append("features", feature);
     });
-    data.pLanguages.forEach((language: string) => {
+    data.planguages.forEach((language: string) => {
       formData.append("pLanguages", language);
     });
     data.tools.forEach((tool: string) => {
       formData.append("tools", tool);
     });
 
-    data.images.forEach((image: string) => {
+    data.images.forEach((image: any) => {
       const blob = File64base(image, `image_${Date.now()}.png`, "image/png");
       formData.append("img", blob);
     });
@@ -70,7 +69,7 @@ export const gitProdCreate = async (data: gitProd) => {
   }
 };
 
-export const gitProdUpdate = async (project_id: string, data: gitProd) => {
+export const gitProdUpdate = async (project_id: string, data: CEGit) => {
   if (!project_id) {
     throw new Error("Project ID is required for update");
   }
@@ -88,14 +87,14 @@ export const gitProdUpdate = async (project_id: string, data: gitProd) => {
     data.features.forEach((feature: string) => {
       formData.append("features", feature);
     });
-    data.pLanguages.forEach((language: string) => {
+    data.planguages.forEach((language: string) => {
       formData.append("pLanguages", language);
     });
     data.tools.forEach((tool: string) => {
       formData.append("tools", tool);
     });
 
-    data.images.forEach((image: string) => {
+    data.images.forEach((image) => {
       if (typeof image === "string") {
         const blob = File64base(image, `image_${Date.now()}.png`, "image/png");
         formData.append("img", blob);

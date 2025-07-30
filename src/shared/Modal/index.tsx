@@ -27,15 +27,15 @@ import {
 import { FileConvertImage } from "@_/hooks/file64Base";
 import { useGitProdSingle } from "@_/hooks/useGitProd";
 
-interface InputCreateProps {
-  id: string;
+type InputCreateProps = {
+  id?: string;
   title: string;
   placeholder: string;
   type: string;
   returnName: string;
   name: string;
-  key: string;
-}
+  key?: string;
+};
 
 interface ModalProps {
   isEdit?: boolean;
@@ -49,14 +49,9 @@ export const KeyValModal = () => {
   const { isDarkMode } = useDarkMode();
   const colors = useColorsTheme();
   const [keyId, setKeyId] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const {
-    mutateAsync: getToken,
-    isPending,
-    isSuccess,
-    isError,
-  } = useGetToken();
+  const { mutateAsync: getToken } = useGetToken();
   const handleKeyIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyId(e.target.value);
   };
@@ -146,12 +141,10 @@ export const ModalCE: React.FC<ModalProps> = ({
   prodjectId,
 }) => {
   const { isDarkMode } = useDarkMode();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [images, setImages] = useState<
-    (string | { url: string; public_id?: string })[]
-  >([]);
+  // const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState<(string | { url: string; public_id?: string })[]>([]);
   const [open, setOpen] = useState(false);
-  const { mutateAsync: createGit, isPending, isError } = useGitProdCreate();
+  const { mutateAsync: createGit, isPending } = useGitProdCreate();
   const { mutateAsync: updateGit, isPending: isUpdating } = useGitProdUpdate();
   const { mutateAsync: removeImage } = useRemoveImage();
   const [fav, setFav] = useState<boolean>(false);
@@ -169,7 +162,7 @@ export const ModalCE: React.FC<ModalProps> = ({
     tools: [] as string[],
   });
 
-  const { data: gitProdSingle } = useGitProdSingle(prodjectId);
+  const { data: gitProdSingle } = useGitProdSingle(prodjectId ?? "");
 
   useEffect(() => {
     setOpen(!!opening);
@@ -206,9 +199,9 @@ export const ModalCE: React.FC<ModalProps> = ({
 
   useEffect(() => {
     if (isPending || isUpdating) {
-      setLoading(true);
+      // setLoading(true);
       const timer = setTimeout(() => {
-        setLoading(false);
+        // setLoading(false);
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -220,10 +213,10 @@ export const ModalCE: React.FC<ModalProps> = ({
         console.warn("Please fill all required fields and upload images.");
         return;
       }
-      if (formArea.features.length === 0) {
-        console.warn("Please add at least one feature.");
-        return;
-      }
+      // if (formArea.features.length === 0) {
+      //   console.warn("Please add at least one feature.");
+      //   return;
+      // }
       if (formArea.pLanguages.length === 0) {
         console.warn("Please add at least one programming language.");
         return;
@@ -236,23 +229,23 @@ export const ModalCE: React.FC<ModalProps> = ({
       const formDatas = {
         title: form.title,
         gitUrl: form.gitUrl,
-        desc: formArea.desc,
+        desc: typeof formArea.desc === "string" ? formArea.desc : "",
         category: form.category,
-        favorite: fav,
+        favorite: String(fav),
         features: Array.isArray(formArea.features) ? formArea.features : [],
-        pLanguages: Array.isArray(formArea.pLanguages)
+        planguages: Array.isArray(formArea.pLanguages)
           ? formArea.pLanguages
           : [],
         tools: Array.isArray(formArea.tools) ? formArea.tools : [],
-        images: images.filter((file) =>
-          typeof file === "string" ? "https://" !== file.slice(0, 8) : true
+        images: images.filter((img) =>
+          typeof img === "string" ? !img.startsWith("https://") : true
         ),
       };
 
       if (isEdit && prodjectId) {
         await updateGit({ data: formDatas, project_id: prodjectId })
           .then(() => {
-            setLoading(false);
+            // setLoading(false);
             setFav(false);
             setOpen(false);
             if (setOpening) setOpening(false);
@@ -263,7 +256,7 @@ export const ModalCE: React.FC<ModalProps> = ({
           });
         return;
       } else {
-        await createGit({ data: formDatas })
+        await createGit(formDatas)
           .then(() => {
             setForm({
               title: "",
@@ -277,7 +270,7 @@ export const ModalCE: React.FC<ModalProps> = ({
               tools: [],
             });
             setImages([]);
-            setLoading(false);
+            // setLoading(false);
             setFav(false);
             setOpen(false);
           })
@@ -525,7 +518,7 @@ export const ModalCE: React.FC<ModalProps> = ({
                         const arr = Array.isArray(prev[input.name])
                           ? (prev[input.name] as string[])
                           : [];
-                        if (arr.length < 5) {
+                        if (arr.length < 10) {
                           return {
                             ...prev,
                             [input.name]: [...arr, ""],
@@ -599,8 +592,8 @@ export const ModalCE: React.FC<ModalProps> = ({
                       onClick={() => {
                         if (typeof image !== "string") {
                           removeImage({
-                            project_id: prodjectId,
-                            public_id: image.public_id,
+                            project_id: prodjectId ?? "",
+                            public_id: image.public_id ?? "",
                           });
                         }
                         setImages((prev) => prev.filter((_, i) => i !== idx));
@@ -637,7 +630,7 @@ export const ModalCE: React.FC<ModalProps> = ({
             onClick={handleGitSubmit}
             disabled={isPending || isUpdating}
           >
-            {(isPending || isUpdating) ? "Submitting..." : "Submit"}
+            {isPending || isUpdating ? "Submitting..." : "Submit"}
           </Button>
         </DialogFooter>
       </DialogContent>

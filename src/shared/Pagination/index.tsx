@@ -6,21 +6,21 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@_/components/ui/pagination";
-import { useState, Children, isValidElement, useEffect } from "react";
+import { useState, Children, isValidElement } from "react";
 import { motion } from "framer-motion";
 import { useColorsTheme } from "../colors";
+import { useDarkMode } from "@_/stores/useDarkMode";
 
 export default function Paginate({
   children,
   itemsPerPage = 4,
   maxVisiblePages = 5,
-  pageReturn,
 }: {
   children: React.ReactNode;
   itemsPerPage?: number;
   maxVisiblePages?: number;
-  pageReturn?: number;
 }) {
+  const { isDarkMode } = useDarkMode();
   const allItems = Children.toArray(children).filter(isValidElement);
   const [currentPage, setCurrentPage] = useState(1);
   const colorTheme = useColorsTheme();
@@ -91,11 +91,12 @@ export default function Paginate({
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
+              className={`text-[14px] mr-0 md:mr-6 lg:mr-6 ${isDarkMode ? 'hover:text-[#CF0F47]' : 'hover:text-[#123458]'}`}
               href="#"
-              onClick={(e) => {
+              onClick={(e: any) => {
                 e.preventDefault();
                 setCurrentPage((prev) => Math.max(1, prev - 1));
-                returnCurrentPage?.(Math.max(1, currentPage - 1));
+                setCurrentPage?.(Math.max(1, currentPage - 1));
               }}
             />
           </PaginationItem>
@@ -107,7 +108,7 @@ export default function Paginate({
                 <PaginationLink
                   href="#"
                   isActive={page === currentPage}
-                  onClick={(e) => {
+                  onClick={(e: any) => {
                     e.preventDefault();
                     setCurrentPage(page);
                   }}
@@ -120,8 +121,9 @@ export default function Paginate({
 
           <PaginationItem>
             <PaginationNext
+              className={`text-[14px] mr-0 md:ml-3 lg:ml-3 ${isDarkMode ? 'hover:text-[#CF0F47]' : 'hover:text-[#123458]'}`}
               href="#"
-              onClick={(e) => {
+              onClick={(e: any) => {
                 e.preventDefault();
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1));
               }}

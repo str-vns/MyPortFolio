@@ -12,7 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as RoutesImport } from './routes/routes'
-import { Route as MainImport } from '../routes/main
+import { Route as MainImport } from './routes/main'
 
 // Create/Update Routes
 
