@@ -17,7 +17,7 @@ function App() {
       <div
         className={`flex items-center justify-center h-screen p-4 ${isDarkMode ? "bg-black" : "bg-white"}`}
       >
-        <LoadingText text="Please Wait Thank You ..." />
+        <LoadingText text="Please Wait The Server Starts Thank You ..." />
       </div>
     );
   }
