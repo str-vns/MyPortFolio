@@ -1,6 +1,5 @@
 import React from "react";
 import { PiDownloadBold } from "react-icons/pi";
-import { educationData, experienceData } from "@_/data/resumeData";
 import { Button } from "@_/components/ui/button";
 import { useColorsTheme } from "@_/shared/colors";
 import { useDarkMode } from "@_/stores/useDarkMode";

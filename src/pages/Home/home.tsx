@@ -37,7 +37,7 @@ const Home = () => {
         </FadeInOnScroll>
 
         <FadeInOnScroll>
-          <section id="portfolio" className="min-h-screen scroll-mt-24">
+          <section id="portfolio" className="min-h-screen ">
             <Portfolio />
           </section>
         </FadeInOnScroll>

@@ -41,7 +41,7 @@ export function AppSidebar(props: SidebarNavProps) {
     useTokenStore.getState().setToken("");
     useTokenStore.getState().setAuthenticated(false);
   };
-
+console.log(process.env.BUILD)
   return (
     <div className="inset-0">
       <Sidebar className="border-none w-40 ">

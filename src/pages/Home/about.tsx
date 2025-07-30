@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { ChevronsLeftRightEllipsis, FileCode } from "lucide-react";
 import { useColorsTheme } from "@_/shared/colors";
 import { List } from "@_/shared/List";
-import { skillsData } from "@_/data/skillsData";
+import { showCase } from "@_/data/ShowCase";
 import { useSkills, useSoftSkill } from "@_/hooks/useGitProd";
 
 interface Skill {
@@ -14,7 +14,7 @@ interface Skill {
 
 const About = () => {
   const { data: skills, isPending, refetch } = useSkills();
-  const { data: softSkill } = useSoftSkill()
+  const { data: softSkill } = useSoftSkill();
   const colorTheme = useColorsTheme();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const About = () => {
           About Me
         </h1>
       </div>
-
+      {/* 
       <div className="w-full max-w-6xl flex flex-col items-center">
         <p className="mb-4 text-center" style={{ color: colorTheme.SEMIBLACK }}>
           Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
@@ -39,7 +39,7 @@ const About = () => {
           pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
           tempor.
         </p>
-      </div>
+      </div> */}
 
       <div className="flex flex-col lg:flex-row items-start justify-center gap-10 w-full max-w-[1000px] py-10">
         <img
@@ -55,14 +55,15 @@ const About = () => {
               color: colorTheme.NAVYBLUE,
             }}
           >
-            Lorem ipsum dolor
+            {process.env.NAME}
           </h1>
           <p className="mb-4" style={{ color: colorTheme.SEMIBLACK }}>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-            faucibus ex sapien vitae pellentesque sem placerat.
+            A fresh graduate always willing to learn and grow — aspiring to be a
+            DevOps engineer or web and mobile developer, with a strong interest
+            in exploring hardware as well.
           </p>
 
-          <div className="mt-6 flex flex-col md:flex-row lg:flex-row justify-between gap-10 mr-5">
+          <div className="mt-6 flex flex-col md:flex-row lg:flex-row justify-between gap-10 mr-5 text-[15px]">
             <div className="flex flex-col ">
               <p className="mb-5">
                 <ChevronsLeftRightEllipsis
@@ -75,7 +76,7 @@ const About = () => {
                     color: colorTheme.NAVYBLUE,
                   }}
                 >
-                  Lorem: sit amet
+                  Address: 114 Bagumbayan Taguig, 1630
                 </span>
               </p>
               <p className="mb-5">
@@ -89,21 +90,7 @@ const About = () => {
                     color: colorTheme.NAVYBLUE,
                   }}
                 >
-                  Lorem: sit amet
-                </span>
-              </p>
-              <p className="mb-5">
-                <ChevronsLeftRightEllipsis
-                  className="inline-block mr-2 "
-                  style={{ color: colorTheme.SEMIBLACK }}
-                />
-                <span
-                  className="font-bold"
-                  style={{
-                    color: colorTheme.NAVYBLUE,
-                  }}
-                >
-                  Lorem: sit amet
+                  Email: stvnsbarrantes@gmail.com
                 </span>
               </p>
             </div>
@@ -119,7 +106,7 @@ const About = () => {
                     color: colorTheme.NAVYBLUE,
                   }}
                 >
-                  Lorem: sit amet
+                  Interest: Also exploring hardware and embedded systems
                 </span>
               </p>
               <p className="mb-5">
@@ -133,54 +120,40 @@ const About = () => {
                     color: colorTheme.NAVYBLUE,
                   }}
                 >
-                  Lorem: sit amet
-                </span>
-              </p>
-              <p className="mb-5">
-                <ChevronsLeftRightEllipsis
-                  className="inline-block mr-2 "
-                  style={{ color: colorTheme.SEMIBLACK }}
-                />
-                <span
-                  className="font-bold"
-                  style={{
-                    color: colorTheme.NAVYBLUE,
-                  }}
-                >
-                  Lorem: sit amet
+                  GitHub: str-vns
                 </span>
               </p>
             </div>
           </div>
-
+{/* 
           <p className="mt-4" style={{ color: colorTheme.SEMIBLACK }}>
             Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
             faucibus ex sapien vitae pellentesque sem placerat.
-          </p>
+          </p> */}
         </div>
       </div>
 
-      <p
+      {/* <p
         className="max-w-[1000px] text-center mb-10"
         style={{ color: colorTheme.SEMIBLACK }}
       >
         Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
         ex sapien vitae pellentesque sem placerat.
-      </p>
+      </p> */}
 
       <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 lg:gap-40 mb-20">
-        {[1, 2, 3, 4].map((item) => (
-          <div key={item} className="flex flex-col items-center justify-center">
+        {showCase.map((item: any, index: number) => (
+          <div key={index} className="flex flex-col items-center justify-center">
             <div className={`rounded-full bg-[${colorTheme.NAVYBLUE}] p-4`}>
               <FileCode className={`text-[${colorTheme.LIGHTGREY}]`} />
             </div>
             <span
               className={`text-2xl mt-2 font-bold text-[${colorTheme.SEMIBLACK}]`}
             >
-              {item}
+              {item.valueNum}
             </span>
             <span className={`text-[16px] mt-2 text-[${colorTheme.SEMIBLACK}]`}>
-              File Code
+               {item.type}
             </span>
           </div>
         ))}
@@ -197,10 +170,10 @@ const About = () => {
         className="w-full max-w-6xl text-gray-700 flex flex-col items-center"
         style={{ color: colorTheme.SEMIBLACK }}
       >
-        <p className="mb-4 text-center">
+        {/* <p className="mb-4 text-center">
           Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
           faucibus ex sapien vitae pellentesque sem placerat.
-        </p>
+        </p> */}
       </div>
       <div className="w-full max-w-6xl ">
         <p
@@ -218,7 +191,7 @@ const About = () => {
           >
             Soft Skills
           </p>
-           <List items={softSkill} isTech={false} />
+          <List items={softSkill} isTech={false} />
         </div>
       </div>
     </div>
