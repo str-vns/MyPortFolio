@@ -5,22 +5,23 @@ import LoadingText from "@_/shared/Loading/index";
 import "./App.css";
 
 function App() {
-  const { isLoading } = useGitProd("all", 1);
   const { isDarkMode } = useDarkMode();
+  const { isLoading, data: gitProd} = useGitProd("All", 1);
+
+  if (isLoading || !gitProd) {
+    return (
+      <div
+        className={`flex items-center justify-center h-screen p-4 ${isDarkMode ? "bg-black" : "bg-white"}`}
+      >
+        <LoadingText text="Please Wait Thank You ..." />
+      </div>
+    );
+  }
+
   return (
     <>
-      <div>
-        {isLoading ? (
-          <div className={`flex items-center justify-center h-screen p-4 ${isDarkMode ? "bg-black" : "bg-white"}`}>
-          <LoadingText text="Please Wait Thank You ..." />
-          </div>
-        ) : (
-          <>
-            <hr />
-            <Outlet />
-          </>
-        )}
-      </div>
+      <hr />
+      <Outlet />
     </>
   );
 }
